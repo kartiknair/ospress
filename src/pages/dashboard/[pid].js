@@ -45,7 +45,11 @@ function Editor({ post }) {
 
           let toSave = { ...clientPost }
           delete toSave.id // since we get the id from the document not the data
-          firebase.firestore().collection('posts').doc(post.id).set(toSave)
+          await firebase
+            .firestore()
+            .collection('posts')
+            .doc(post.id)
+            .set(toSave)
           setSlugErr(false)
         }}
       >
