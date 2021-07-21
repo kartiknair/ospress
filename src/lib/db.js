@@ -44,11 +44,11 @@ export async function getUserByName(name) {
     throw { code: 'user/not-found' }
   }
 
-  const user = query.docs[0].data()
+  const user = { id: query.docs[0].id, ...query.docs[0].data() }
   const postDocPromises = user.posts.map(postId => getPostByID(postId))
   user.posts = await Promise.all(postDocPromises)
 
-  return { id: doc.id, ...user }
+  return user
 }
 
 export async function getPostByID(id) {
