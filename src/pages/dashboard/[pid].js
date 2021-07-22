@@ -5,7 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 
 import FIREBASE_CONIFG from '../../lib/firebase-config'
-import { postWithUserIDAndSlugExists } from '../../lib/db'
+import { postWithUserIDAndSlugExists, setPost } from '../../lib/db'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -16,6 +16,7 @@ function Editor({ post }) {
     title: '',
     content: '',
     slug: '',
+    published: true,
   })
   const [slugErr, setSlugErr] = useState(false)
   useEffect(() => {
@@ -43,7 +44,10 @@ function Editor({ post }) {
             }
           }
 
-          let toSave = { ...clientPost }
+          let toSave = {
+            ...clientPost,
+            lastEdited: firebase.firestore.Timestamp.now(),
+          }
           delete toSave.id // since we get the id from the document not the data
           await firebase
             .firestore()
@@ -54,6 +58,17 @@ function Editor({ post }) {
         }}
       >
         Save changes
+      </button>
+      <button
+        onClick={async () => {
+          await firebase
+            .firestore()
+            .collection('posts')
+            .doc(post.id)
+            .update({ published: !post.published })
+        }}
+      >
+        {post.published ? 'Make Draft' : 'Publish'}
       </button>
       <input
         type="text"

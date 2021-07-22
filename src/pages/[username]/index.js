@@ -11,6 +11,7 @@ if (firebase.apps.length === 0) {
 export default function Profile({ user }) {
   return (
     <main>
+      <img src={user.photo} />
       <h1>{user.displayName}'s profile page!</h1>
       <h2>Posts:</h2>
       <ul>
@@ -34,7 +35,7 @@ export async function getStaticPaths() {
   const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
   return {
     paths: users.map(u => ({ params: { username: u.name } })),
-    fallback: false,
+    fallback: 'blocking',
   }
 }
 
@@ -43,6 +44,11 @@ export async function getStaticProps({ params }) {
 
   try {
     const user = await getUserByName(username)
+    user.posts = user.posts.map(p => ({
+      ...p,
+      lastEdited: p.lastEdited.toDate().getTime(),
+    }))
+    user.posts = user.posts.filter(p => p.published)
     return {
       props: { user },
     }

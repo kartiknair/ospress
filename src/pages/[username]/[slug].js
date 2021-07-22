@@ -11,7 +11,10 @@ export default function Post({ post }) {
   return (
     <main>
       <h1>{post.title}</h1>
-      <p>By {post.author}</p>
+      <p>
+        By {post.author} | Last edited:{' '}
+        {new Date(post.lastEdited).toDateString()}
+      </p>
       <p>{post.content}</p>
     </main>
   )
@@ -19,7 +22,9 @@ export default function Post({ post }) {
 
 export async function getStaticPaths() {
   const snapshot = await firebase.firestore().collection('posts').get()
-  const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+  let posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+  posts = posts.filter(p => p.published)
+
   return {
     paths: posts.map(post => ({
       params: { username: post.author, slug: post.slug },
@@ -33,6 +38,10 @@ export async function getStaticProps({ params }) {
 
   try {
     const post = await getPostByUsernameAndSlug(username, slug)
+    if (!post.published) {
+      return { notFound: true }
+    }
+    post.lastEdited = post.lastEdited.toDate().getTime()
     return {
       props: { post, revalidate: 1 },
     }

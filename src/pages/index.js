@@ -32,14 +32,14 @@ export default function Home() {
               .auth()
               .signInWithPopup(googleAuthProvider)
               .then(async cred => {
-                console.log('hello??')
                 let userExists = await userWithIDExists(cred.user.uid)
                 if (!userExists) {
                   await setUser(cred.user.uid, {
                     name: cred.user.uid,
-                    displayName: 'Anonymous',
+                    displayName: cred.user.displayName || 'Anonymous',
                     about: 'Nothing to say about you.',
                     posts: [],
+                    photo: cred.user.photoURL,
                   })
                 }
               })

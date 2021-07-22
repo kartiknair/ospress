@@ -1,8 +1,9 @@
 import firebase from 'firebase'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 import { createPostForUser } from '../../lib/db'
@@ -15,7 +16,7 @@ export default function Dashboard() {
   const router = useRouter()
 
   const [user, userLoading, userError] = useAuthState(firebase.auth())
-  const [posts, postLoading, postError] = useCollectionData(
+  const [posts, postsLoading, postsError] = useCollectionData(
     firebase
       .firestore()
       .collection('posts')
@@ -30,9 +31,9 @@ export default function Dashboard() {
     }
   }, [user, userLoading, userError])
 
-  if (userLoading || postLoading) {
+  if (userLoading || postsLoading) {
     return <p>Loading...</p>
-  } else if (userError || postError) {
+  } else if (userError || postsError) {
     return (
       <>
         <p>Oop, we've had an error:</p>
@@ -48,7 +49,6 @@ export default function Dashboard() {
           console.log(user.uid)
           const newPostsId = await createPostForUser(user.uid)
           router.push(`/dashboard/${newPostsId}`)
-          // console.log(newPostsId)
         }}
       >
         Create post
@@ -58,7 +58,11 @@ export default function Dashboard() {
       <ul>
         {posts.map(post => (
           <li key={post.id}>
-            <pre>{JSON.stringify(post)}</pre>
+            <Link href={`/dashboard/${post.id}`}>
+              <a>
+                {!post.published && '[DRAFT]'} {post.title}
+              </a>
+            </Link>
           </li>
         ))}
       </ul>
