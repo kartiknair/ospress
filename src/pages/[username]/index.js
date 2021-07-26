@@ -2,6 +2,7 @@
 import firebase from 'firebase'
 import Link from 'next/link'
 import { css } from '@emotion/react'
+import { htmlToText } from 'html-to-text'
 
 import { getUserByName } from '../../lib/db'
 import FIREBASE_CONIFG from '../../lib/firebase-config'
@@ -91,7 +92,7 @@ export default function Profile({ user }) {
                 line-height: 1.5em;
               `}
             >
-              {post.excerpt || truncate(post.content, 25)}
+              {post.excerpt || truncate(htmlToText(post.content), 25)}
             </p>
           </li>
         ))}

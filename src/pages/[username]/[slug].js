@@ -1,13 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import firebase from 'firebase'
 import { css } from '@emotion/react'
+import sanitize from 'sanitize-html'
+import Link from 'next/link'
 
 import { getPostByUsernameAndSlug } from '../../lib/db'
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 import theme from '../../lib/theme'
 
 import Container from '../../components/container'
-import Link from 'next/link'
+import PostContainer from '../../components/post-container'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -58,17 +60,9 @@ export default function Post({ post }) {
         </p>
       </div>
 
-      <div
-        css={css`
-          color: ${theme.colors.grey[4]};
-          margin-top: 2rem;
-          font-size: 1.125rem;
-          font-family: 'Newsreader', serif;
-          line-height: 1.5em;
-        `}
-      >
-        <p>{post.content}</p>
-      </div>
+      <PostContainer
+        dangerouslySetInnerHTML={{ __html: sanitize(post.content) }}
+      />
     </Container>
   )
 }

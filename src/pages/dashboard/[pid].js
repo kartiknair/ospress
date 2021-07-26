@@ -5,13 +5,22 @@ import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 import { css } from '@emotion/react'
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+
+import Document from '@tiptap/extension-document'
+import Paragraph from '@tiptap/extension-paragraph'
+import Text from '@tiptap/extension-text'
 
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 import { postWithUserIDAndSlugExists } from '../../lib/db'
+import theme from '../../lib/theme'
 
 import Container from '../../components/container'
 import Button from '../../components/button'
-import Input, { Textarea } from '../../components/input'
+import Input from '../../components/input'
+import Spinner from '../../components/spinner'
+import PostContainer from '../../components/post-container'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -29,6 +38,45 @@ function Editor({ post }) {
   useEffect(() => {
     setClientPost(post)
   }, [])
+
+  const ParagraphDocument = Document.extend({ content: 'paragraph' })
+
+  const titleEditor = useEditor({
+    content: post.title,
+    extensions: [ParagraphDocument, Paragraph, Text],
+    onUpdate: ({ editor: newEditor }) => {
+      setClientPost(prevPost => ({
+        ...prevPost,
+        title: newEditor.getHTML().slice(3, -4),
+      }))
+    },
+  })
+
+  const excerptEditor = useEditor({
+    content: post.excerpt,
+    extensions: [ParagraphDocument, Paragraph, Text],
+    onUpdate: ({ editor: newEditor }) => {
+      setClientPost(prevPost => ({
+        ...prevPost,
+        excerpt: newEditor.getHTML().slice(3, -4),
+      }))
+    },
+  })
+
+  const contentEditor = useEditor({
+    content: post.content,
+    autofocus: 'end',
+    extensions: [
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2, 3],
+        },
+      }),
+    ],
+    onUpdate: ({ editor: newEditor }) => {
+      setClientPost(prevPost => ({ ...prevPost, content: newEditor.getHTML() }))
+    },
+  })
 
   return (
     <Container maxWidth="560px">
@@ -96,60 +144,7 @@ function Editor({ post }) {
 
       <div
         css={css`
-          margin-top: 2.5rem;
-          margin-bottom: 1rem;
-        `}
-      >
-        <label
-          htmlFor="post-title"
-          css={css`
-            display: block;
-            margin-bottom: 0.5rem;
-          `}
-        >
-          Title
-        </label>
-        <Input
-          type="text"
-          id="post-title"
-          value={clientPost.title}
-          onChange={e =>
-            setClientPost(prevPost => ({ ...prevPost, title: e.target.value }))
-          }
-        />
-      </div>
-
-      <div
-        css={css`
-          margin-top: 2.5rem;
-          margin-bottom: 1rem;
-        `}
-      >
-        <label
-          htmlFor="post-excerpt"
-          css={css`
-            display: block;
-            margin-bottom: 0.5rem;
-          `}
-        >
-          Excerpt
-        </label>
-        <Input
-          type="text"
-          id="post-excerpt"
-          placeholder="Short description about the post..."
-          value={clientPost.excerpt}
-          onChange={e =>
-            setClientPost(prevPost => ({
-              ...prevPost,
-              excerpt: e.target.value,
-            }))
-          }
-        />
-      </div>
-
-      <div
-        css={css`
+          margin-top: 5rem;
           margin-bottom: 1rem;
         `}
       >
@@ -176,29 +171,44 @@ function Editor({ post }) {
 
       <div
         css={css`
-          margin-bottom: 1rem;
+          .ProseMirror-focused {
+            outline: none;
+          }
+
+          margin-top: 5rem;
+          font-size: 1.5rem;
+          font-weight: 500;
         `}
       >
-        <label
-          htmlFor="post-content"
-          css={css`
-            display: block;
-            margin-bottom: 0.5rem;
-          `}
-        >
-          Content
-        </label>
-        <Textarea
-          id="post-content"
-          value={clientPost.content}
-          onChange={e =>
-            setClientPost(prevPost => ({
-              ...prevPost,
-              content: e.target.value,
-            }))
-          }
-        />
+        <EditorContent editor={titleEditor} />
       </div>
+
+      <div
+        css={css`
+          .ProseMirror-focused {
+            outline: none;
+          }
+
+          margin: 1.5rem 0;
+          font-size: 1.15rem;
+          font-weight: 500;
+          color: ${theme.colors.grey[4]};
+        `}
+      >
+        <EditorContent editor={excerptEditor} />
+      </div>
+
+      <PostContainer
+        css={css`
+          .ProseMirror-focused {
+            outline: none;
+          }
+
+          margin-bottom: 5rem;
+        `}
+      >
+        <EditorContent editor={contentEditor} />
+      </PostContainer>
     </Container>
   )
 }
@@ -225,15 +235,19 @@ export default function PostEditor() {
 
   if (userError || postError) {
     return (
-      <>
+      <Container maxWidth="560px">
         <p>Oop, we've had an error:</p>
         <pre>{JSON.stringify(userError)}</pre>
         <pre>{JSON.stringify(postError)}</pre>
-      </>
+      </Container>
     )
   } else if (post) {
     return <Editor post={post} />
   }
 
-  return <p>Loading...</p>
+  return (
+    <Container maxWidth="560px">
+      <Spinner />
+    </Container>
+  )
 }
