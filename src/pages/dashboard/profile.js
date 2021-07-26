@@ -12,6 +12,7 @@ import { userWithNameExists } from '../../lib/db'
 import Container from '../../components/container'
 import Button from '../../components/button'
 import Input, { Textarea } from '../../components/input'
+import Spinner from '../../components/spinner'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -170,15 +171,19 @@ export default function ProfileEditor() {
 
   if (userError || userdataError) {
     return (
-      <>
+      <Container maxWidth="560px">
         <p>Oop, we've had an error:</p>
         <pre>{JSON.stringify(userError)}</pre>
         <pre>{JSON.stringify(userdataError)}</pre>
-      </>
+      </Container>
     )
   } else if (userdata) {
     return <Editor user={userdata} />
   }
 
-  return <p>Loading...</p>
+  return (
+    <Container maxWidth="560px">
+      <Spinner />
+    </Container>
+  )
 }

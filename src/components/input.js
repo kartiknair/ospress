@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 
 const inputStyles = css`
   display: block;
-  width: 15rem;
+  width: 17rem;
   padding: 0.75rem 1.5rem;
   background: none;
   border: 1px solid ${theme.colors.grey[2]};
