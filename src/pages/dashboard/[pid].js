@@ -22,6 +22,7 @@ function Editor({ post }) {
     title: '',
     content: '',
     slug: '',
+    excerpt: '',
     published: true,
   })
   const [slugErr, setSlugErr] = useState(false)
@@ -47,6 +48,7 @@ function Editor({ post }) {
             post.title === clientPost.title &&
             post.slug === clientPost.slug &&
             post.content === clientPost.content &&
+            post.excerpt === clientPost.excerpt &&
             !slugErr
           }
           onClick={async () => {
@@ -113,6 +115,35 @@ function Editor({ post }) {
           value={clientPost.title}
           onChange={e =>
             setClientPost(prevPost => ({ ...prevPost, title: e.target.value }))
+          }
+        />
+      </div>
+
+      <div
+        css={css`
+          margin-top: 2.5rem;
+          margin-bottom: 1rem;
+        `}
+      >
+        <label
+          htmlFor="post-excerpt"
+          css={css`
+            display: block;
+            margin-bottom: 0.5rem;
+          `}
+        >
+          Excerpt
+        </label>
+        <Input
+          type="text"
+          id="post-excerpt"
+          placeholder="Short description about the post..."
+          value={clientPost.excerpt}
+          onChange={e =>
+            setClientPost(prevPost => ({
+              ...prevPost,
+              excerpt: e.target.value,
+            }))
           }
         />
       </div>
