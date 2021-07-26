@@ -1,9 +1,13 @@
+/** @jsxImportSource @emotion/react */
 import firebase from 'firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import Link from 'next/link'
+import { css } from '@emotion/react'
 
 import { setUser, userWithIDExists } from '../lib/db'
 import FIREBASE_CONIFG from '../lib/firebase-config'
+import Button, { LinkButton } from '../components/button'
+import Spinner from '../components/spinner'
+import Container from '../components/container'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -12,20 +16,49 @@ if (firebase.apps.length === 0) {
 export default function Home() {
   const [user, loading, error] = useAuthState(firebase.auth())
 
-  if (loading) {
-    return <p>Loading...</p>
-  } else if (error) {
+  if (error) {
     return (
-      <>
+      <Container maxWidth="420px">
         <p>Oop, we've had an error:</p>
         <pre>{JSON.stringify(error)}</pre>
-      </>
+      </Container>
     )
-  } else if (!user) {
-    return (
-      <main>
-        <h1>Welcome to urblog!</h1>
-        <button
+  }
+
+  return (
+    <Container maxWidth="420px">
+      <h1
+        css={css`
+          font-size: 1.5rem;
+          letter-spacing: -0.02rem;
+          margin-bottom: 1.5rem;
+        `}
+      >
+        Ultra minimal blogging platform for anybody who writes
+      </h1>
+      {loading ? (
+        <Button>
+          <Spinner />
+        </Button>
+      ) : user ? (
+        <div
+          css={css`
+            display: flex;
+          `}
+        >
+          <LinkButton href="/dashboard">Dasboard</LinkButton>
+          <Button
+            css={css`
+              margin-left: 1rem;
+            `}
+            type="outline"
+            onClick={() => firebase.auth().signOut()}
+          >
+            Sign Out
+          </Button>
+        </div>
+      ) : (
+        <Button
           onClick={() => {
             const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
             firebase
@@ -46,18 +79,8 @@ export default function Home() {
           }}
         >
           Sign in with Google
-        </button>
-      </main>
-    )
-  }
-
-  return (
-    <p>
-      Go to{' '}
-      <Link href="/dashboard">
-        <a>Dasboard</a>
-      </Link>
-      <button onClick={() => firebase.auth().signOut()}>Sign Out</button>
-    </p>
+        </Button>
+      )}
+    </Container>
   )
 }

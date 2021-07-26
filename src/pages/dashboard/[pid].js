@@ -1,11 +1,17 @@
+/** @jsxImportSource @emotion/react */
 import firebase from 'firebase'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
+import { css } from '@emotion/react'
 
 import FIREBASE_CONIFG from '../../lib/firebase-config'
-import { postWithUserIDAndSlugExists, setPost } from '../../lib/db'
+import { postWithUserIDAndSlugExists } from '../../lib/db'
+
+import Container from '../../components/container'
+import Button from '../../components/button'
+import Input, { Textarea } from '../../components/input'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -24,75 +30,145 @@ function Editor({ post }) {
   }, [])
 
   return (
-    <main>
-      <button
-        disabled={
-          post.title === clientPost.title &&
-          post.slug === clientPost.slug &&
-          post.content === clientPost.content &&
-          !slugErr
-        }
-        onClick={async () => {
-          if (clientPost.slug !== post.slug) {
-            let slugClashing = await postWithUserIDAndSlugExists(
-              post.author,
-              clientPost.slug,
-            )
-            if (slugClashing) {
-              setSlugErr(true)
-              return
+    <Container maxWidth="560px">
+      <div
+        css={css`
+          display: flex;
+        `}
+      >
+        <Button
+          css={css`
+            margin-left: auto;
+            margin-right: 1rem;
+            font-size: 0.9rem;
+          `}
+          type="outline"
+          disabled={
+            post.title === clientPost.title &&
+            post.slug === clientPost.slug &&
+            post.content === clientPost.content &&
+            !slugErr
+          }
+          onClick={async () => {
+            if (clientPost.slug !== post.slug) {
+              let slugClashing = await postWithUserIDAndSlugExists(
+                post.author,
+                clientPost.slug,
+              )
+              if (slugClashing) {
+                setSlugErr(true)
+                return
+              }
             }
-          }
 
-          let toSave = {
-            ...clientPost,
-            lastEdited: firebase.firestore.Timestamp.now(),
+            let toSave = {
+              ...clientPost,
+              lastEdited: firebase.firestore.Timestamp.now(),
+            }
+            delete toSave.id // since we get the id from the document not the data
+            await firebase
+              .firestore()
+              .collection('posts')
+              .doc(post.id)
+              .set(toSave)
+            setSlugErr(false)
+          }}
+        >
+          Save changes
+        </Button>
+        <Button
+          css={css`
+            font-size: 0.9rem;
+          `}
+          onClick={async () => {
+            await firebase
+              .firestore()
+              .collection('posts')
+              .doc(post.id)
+              .update({ published: !post.published })
+          }}
+        >
+          {post.published ? 'Make Draft' : 'Publish'}
+        </Button>
+      </div>
+
+      <div
+        css={css`
+          margin-top: 2.5rem;
+          margin-bottom: 1rem;
+        `}
+      >
+        <label
+          htmlFor="post-title"
+          css={css`
+            display: block;
+            margin-bottom: 0.5rem;
+          `}
+        >
+          Title
+        </label>
+        <Input
+          type="text"
+          id="post-title"
+          value={clientPost.title}
+          onChange={e =>
+            setClientPost(prevPost => ({ ...prevPost, title: e.target.value }))
           }
-          delete toSave.id // since we get the id from the document not the data
-          await firebase
-            .firestore()
-            .collection('posts')
-            .doc(post.id)
-            .set(toSave)
-          setSlugErr(false)
-        }}
+        />
+      </div>
+
+      <div
+        css={css`
+          margin-bottom: 1rem;
+        `}
       >
-        Save changes
-      </button>
-      <button
-        onClick={async () => {
-          await firebase
-            .firestore()
-            .collection('posts')
-            .doc(post.id)
-            .update({ published: !post.published })
-        }}
+        <label
+          htmlFor="post-slug"
+          css={css`
+            display: block;
+            margin-bottom: 0.5rem;
+          `}
+        >
+          Slug
+        </label>
+        <Input
+          type="text"
+          id="post-slug"
+          value={clientPost.slug}
+          onChange={e => {
+            setSlugErr(false)
+            setClientPost(prevPost => ({ ...prevPost, slug: e.target.value }))
+          }}
+        />
+        {slugErr && <p>Invalid slug. That slug is already in use.</p>}
+      </div>
+
+      <div
+        css={css`
+          margin-bottom: 1rem;
+        `}
       >
-        {post.published ? 'Make Draft' : 'Publish'}
-      </button>
-      <input
-        type="text"
-        value={clientPost.title}
-        onChange={e =>
-          setClientPost(prevPost => ({ ...prevPost, title: e.target.value }))
-        }
-      />
-      <input
-        type="text"
-        value={clientPost.slug}
-        onChange={e => {
-          setSlugErr(false)
-          setClientPost(prevPost => ({ ...prevPost, slug: e.target.value }))
-        }}
-      />
-      {slugErr && <p>Invalid slug. That slug is already in use.</p>}
-      <textarea
-        value={clientPost.content}
-        onChange={e =>
-          setClientPost(prevPost => ({ ...prevPost, content: e.target.value }))
-        }
-      />
-    </main>
+        <label
+          htmlFor="post-content"
+          css={css`
+            display: block;
+            margin-bottom: 0.5rem;
+          `}
+        >
+          Content
+        </label>
+        <Textarea
+          id="post-content"
+          value={clientPost.content}
+          onChange={e =>
+            setClientPost(prevPost => ({
+              ...prevPost,
+              content: e.target.value,
+            }))
+          }
+        />
+      </div>
+    </Container>
   )
 }
 

@@ -1,11 +1,17 @@
+/** @jsxImportSource @emotion/react */
 import firebase from 'firebase'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
+import { css } from '@emotion/react'
 
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 import { userWithNameExists } from '../../lib/db'
+
+import Container from '../../components/container'
+import Button from '../../components/button'
+import Input, { Textarea } from '../../components/input'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -24,8 +30,13 @@ function Editor({ user }) {
   }, [])
 
   return (
-    <main>
-      <button
+    <Container maxWidth="560px">
+      <Button
+        css={css`
+          margin-left: auto;
+          font-size: 0.9rem;
+        `}
+        type="outline"
         disabled={
           user.name === clientUser.name &&
           user.displayName === clientUser.displayName &&
@@ -55,33 +66,85 @@ function Editor({ user }) {
         }}
       >
         Save changes
-      </button>
-      <input
-        type="text"
-        value={clientUser.displayName}
-        onChange={e =>
-          setClientUser(prevUser => ({
-            ...prevUser,
-            displayName: e.target.value,
-          }))
-        }
-      />
-      <input
-        type="text"
-        value={clientUser.name}
-        onChange={e => {
-          setUsernameErr(false)
-          setClientUser(prevUser => ({ ...prevUser, name: e.target.value }))
-        }}
-      />
-      {usernameErr !== null && <p>{usernameErr}</p>}
-      <textarea
-        value={clientUser.about}
-        onChange={e =>
-          setClientUser(prevUser => ({ ...prevUser, about: e.target.value }))
-        }
-      />
-    </main>
+      </Button>
+
+      <div
+        css={css`
+          margin-top: 2.5rem;
+          margin-bottom: 1rem;
+        `}
+      >
+        <label
+          htmlFor="profile-display-name"
+          css={css`
+            display: block;
+            margin-bottom: 0.5rem;
+          `}
+        >
+          Display Name
+        </label>
+        <Input
+          id="profile-display-name"
+          type="text"
+          value={clientUser.displayName}
+          onChange={e =>
+            setClientUser(prevUser => ({
+              ...prevUser,
+              displayName: e.target.value,
+            }))
+          }
+        />
+      </div>
+
+      <div
+        css={css`
+          margin-bottom: 1rem;
+        `}
+      >
+        <label
+          htmlFor="profile-username"
+          css={css`
+            display: block;
+            margin-bottom: 0.5rem;
+          `}
+        >
+          Name
+        </label>
+        <Input
+          id="profile-username"
+          type="text"
+          value={clientUser.name}
+          onChange={e => {
+            setUsernameErr(false)
+            setClientUser(prevUser => ({ ...prevUser, name: e.target.value }))
+          }}
+        />
+        {usernameErr !== null && <p>{usernameErr}</p>}
+      </div>
+
+      <div
+        css={css`
+          margin-bottom: 1rem;
+        `}
+      >
+        <label
+          htmlFor="profile-about"
+          css={css`
+            display: block;
+            margin-bottom: 0.5rem;
+          `}
+        >
+          About
+        </label>
+        <Textarea
+          id="profile-about"
+          value={clientUser.about}
+          onChange={e =>
+            setClientUser(prevUser => ({ ...prevUser, about: e.target.value }))
+          }
+        />
+      </div>
+    </Container>
   )
 }
 
