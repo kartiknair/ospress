@@ -31,6 +31,7 @@ export default function Home() {
         css={css`
           font-size: 1.5rem;
           letter-spacing: -0.02rem;
+          margin-top: 15rem;
           margin-bottom: 1.5rem;
         `}
       >

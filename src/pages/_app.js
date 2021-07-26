@@ -68,6 +68,12 @@ const App = ({ Component, pageProps }) => (
         h6 {
           font-weight: 500;
         }
+
+        @media (max-width: 420px) {
+          html {
+            font-size: 90%;
+          }
+        }
       `}
     />
     <Component {...pageProps} />
