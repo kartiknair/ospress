@@ -60,7 +60,6 @@ export default function Dashboard() {
           margin-left: auto;
         `}
         onClick={async () => {
-          console.log(user.uid)
           const newPostsId = await createPostForUser(user.uid)
           router.push(`/dashboard/${newPostsId}`)
         }}

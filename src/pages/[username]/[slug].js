@@ -14,7 +14,6 @@ if (firebase.apps.length === 0) {
 }
 
 export default function Post({ post }) {
-  console.log(post)
   return (
     <Container maxWidth="640px">
       <h1

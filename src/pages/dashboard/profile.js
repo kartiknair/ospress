@@ -159,7 +159,6 @@ export default function ProfileEditor() {
   )
 
   useEffect(() => {
-    console.log(userdata, userdataLoading, userdataError)
     if (!user && !userLoading && !userError) {
       router.push('/')
       return

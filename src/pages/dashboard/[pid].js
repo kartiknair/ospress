@@ -214,7 +214,6 @@ export default function PostEditor() {
   )
 
   useEffect(() => {
-    console.log(post, postLoading, postError)
     if (!user && !userLoading && !userError) {
       router.push('/')
       return

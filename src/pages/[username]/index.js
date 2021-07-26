@@ -22,8 +22,6 @@ const truncate = (words, maxWords) => {
 }
 
 export default function Profile({ user }) {
-  console.log(user)
-
   return (
     <Container maxWidth="640px">
       <img
