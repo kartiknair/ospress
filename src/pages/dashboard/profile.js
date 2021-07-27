@@ -13,6 +13,7 @@ import Container from '../../components/container'
 import Button from '../../components/button'
 import Input, { Textarea } from '../../components/input'
 import Spinner from '../../components/spinner'
+import theme from '../../lib/theme'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -49,6 +50,14 @@ function Editor({ user }) {
             let nameClashing = await userWithNameExists(clientUser.name)
             if (nameClashing) {
               setUsernameErr('That username is in use already.')
+              return
+            } else if (clientUser.name === '') {
+              setUsernameErr('Username cannot be empty.')
+              return
+            } else if (!clientUser.name.match(/^[a-z0-9-]+$/i)) {
+              setUsernameErr(
+                'Username can only consist of letters (a-z,A-Z), numbers (0-9) and dashes (-).',
+              )
               return
             } else if (clientUser.name === 'dashboard') {
               setUsernameErr('That username is reserved.')
@@ -120,7 +129,18 @@ function Editor({ user }) {
             setClientUser(prevUser => ({ ...prevUser, name: e.target.value }))
           }}
         />
-        {usernameErr !== null && <p>{usernameErr}</p>}
+        {usernameErr !== null && (
+          <p
+            css={css`
+              font-size: 0.9rem;
+              color: ${theme.colors.grey[3]};
+              width: 20rem;
+              margin-top: 1rem;
+            `}
+          >
+            {usernameErr}
+          </p>
+        )}
       </div>
 
       <div
