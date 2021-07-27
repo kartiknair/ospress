@@ -31,6 +31,9 @@ export const Textarea = props => (
     {...props}
     css={css`
       ${inputStyles}
+      min-height: 15rem;
+      resize: vertical;
+      padding-top: 1rem;
     `}
   />
 )

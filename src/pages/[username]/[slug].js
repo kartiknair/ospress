@@ -62,6 +62,9 @@ export default function Post({ post }) {
 
       <PostContainer
         dangerouslySetInnerHTML={{ __html: sanitize(post.content) }}
+        css={css`
+          margin-bottom: 5rem;
+        `}
       />
     </Container>
   )
