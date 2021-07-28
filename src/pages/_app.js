@@ -25,24 +25,6 @@ const App = ({ Component, pageProps }) => (
             url('/fonts/Inter-Medium.woff') format('woff');
         }
 
-        @font-face {
-          font-family: 'Newsreader';
-          font-style: normal;
-          font-weight: 400;
-          font-display: swap;
-          src: url('/fonts/NewsreaderText-Regular.woff2') format('woff2'),
-            url('/fonts/NewsreaderText-Regular.woff2') format('woff');
-        }
-
-        @font-face {
-          font-family: 'Newsreader';
-          font-style: italic;
-          font-weight: 400;
-          font-display: swap;
-          src: url('/fonts/NewsreaderText-Italic.woff2') format('woff2'),
-            url('/fonts/NewsreaderText-Italic.woff2') format('woff');
-        }
-
         // By default we use Inter, since it is our UI font
         *,
         *::before,

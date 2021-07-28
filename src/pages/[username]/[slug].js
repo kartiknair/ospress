@@ -3,6 +3,7 @@ import firebase from 'firebase'
 import { css } from '@emotion/react'
 import sanitize from 'sanitize-html'
 import Link from 'next/link'
+import Head from 'next/head'
 
 import { getPostByUsernameAndSlug } from '../../lib/db'
 import FIREBASE_CONIFG from '../../lib/firebase-config'
@@ -18,6 +19,13 @@ if (firebase.apps.length === 0) {
 export default function Post({ post }) {
   return (
     <Container maxWidth="640px">
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+
       <h1
         css={css`
           font-size: 1.5rem;

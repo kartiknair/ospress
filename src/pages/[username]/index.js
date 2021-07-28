@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import firebase from 'firebase'
 import Link from 'next/link'
+import Head from 'next/head'
 import { css } from '@emotion/react'
 import { htmlToText } from 'html-to-text'
 
@@ -25,6 +26,13 @@ const truncate = (words, maxWords) => {
 export default function Profile({ user }) {
   return (
     <Container maxWidth="640px">
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+
       <img
         src={user.photo}
         css={css`
@@ -60,40 +68,55 @@ export default function Profile({ user }) {
         `}
       >
         {user.posts.map(post => (
-          <li key={post.id}>
+          <li
+            key={post.id}
+            css={css`
+              display: flex;
+
+              @media (max-width: 626px) {
+                flex-direction: column;
+              }
+            `}
+          >
+            <p
+              css={css`
+                margin: 0.75rem 0;
+                font-size: 0.9rem;
+                color: ${theme.colors.grey[3]};
+                margin: 0 auto auto 0;
+
+                @media (max-width: 626px) {
+                  margin-bottom: 1rem;
+                }
+              `}
+            >
+              {new Date(post.lastEdited).toDateString()}
+            </p>
+
             <Link href={`/${user.name}/${post.slug}`}>
               <a style={{ textDecoration: 'none', color: 'inherit' }}>
                 <h3
                   css={css`
                     font-size: 1rem;
                     font-weight: 400;
+                    margin-bottom: 0.6rem;
                   `}
                 >
                   {post.title}
                 </h3>
+
+                <p
+                  css={css`
+                    max-width: 25rem;
+                    color: ${theme.colors.grey[4]};
+                    font-family: 'Newsreader', serif;
+                    line-height: 1.5em;
+                  `}
+                >
+                  {post.excerpt || truncate(htmlToText(post.content), 25)}
+                </p>
               </a>
             </Link>
-
-            <p
-              css={css`
-                margin: 0.75rem 0;
-                font-size: 0.9rem;
-                color: ${theme.colors.grey[3]};
-              `}
-            >
-              {new Date(post.lastEdited).toDateString()}
-            </p>
-
-            <p
-              css={css`
-                max-width: 25rem;
-                color: ${theme.colors.grey[4]};
-                font-family: 'Newsreader', serif;
-                line-height: 1.5em;
-              `}
-            >
-              {post.excerpt || truncate(htmlToText(post.content), 25)}
-            </p>
           </li>
         ))}
       </ul>

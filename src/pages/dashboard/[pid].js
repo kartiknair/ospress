@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import firebase from 'firebase'
 import { useEffect, useState } from 'react'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
@@ -80,6 +81,13 @@ function Editor({ post }) {
 
   return (
     <Container maxWidth="560px">
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+
       <div
         css={css`
           display: flex;
