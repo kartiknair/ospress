@@ -2,29 +2,18 @@ import 'modern-normalize'
 import { Global, css } from '@emotion/react'
 
 import theme from '../lib/theme'
+import Head from 'next/head'
 
 const App = ({ Component, pageProps }) => (
   <>
+    <Head>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500"
+        rel="stylesheet"
+      />
+    </Head>
     <Global
       styles={css`
-        @font-face {
-          font-family: 'Inter';
-          font-style: normal;
-          font-weight: 400;
-          font-display: swap;
-          src: url('/fonts/Inter-Regular.woff2') format('woff2'),
-            url('/fonts/Inter-Regular.woff') format('woff');
-        }
-
-        @font-face {
-          font-family: 'Inter';
-          font-style: normal;
-          font-weight: 500;
-          font-display: swap;
-          src: url('/fonts/Inter-Medium.woff2') format('woff2'),
-            url('/fonts/Inter-Medium.woff') format('woff');
-        }
-
         // By default we use Inter, since it is our UI font
         *,
         *::before,
