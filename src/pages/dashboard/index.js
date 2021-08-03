@@ -53,18 +53,69 @@ export default function Dashboard() {
   }
 
   return (
-    <Container maxWidth="420px">
+    <Container
+      maxWidth="640px"
+      css={css`
+        margin-top: 5rem;
+      `}
+    >
+      <header
+        css={css`
+          display: flex;
+          margin-bottom: 5rem;
+
+          a:first-child {
+            margin-left: auto;
+          }
+
+          a {
+            display: block;
+            margin-right: 1.5rem;
+            text-decoration: none;
+          }
+
+          a,
+          button {
+            color: ${theme.colors.grey[2]};
+            cursor: pointer;
+            transition: all 200ms ease;
+          }
+
+          a:hover,
+          button:hover {
+            color: ${theme.colors.grey[3]};
+          }
+
+          button {
+            margin-right: 0;
+          }
+
+          button {
+            border: none;
+            padding: 0;
+            margin: 0;
+            background: none;
+          }
+        `}
+      >
+        <Link href="/dashboard/profile">
+          <a>Profile</a>
+        </Link>
+        <button onClick={() => firebase.auth().signOut()}>Sign Out</button>
+      </header>
+
       <Button
+        type="outline"
         css={css`
           font-size: 0.9rem;
-          margin-left: auto;
+          margin-right: auto;
         `}
         onClick={async () => {
           const newPostsId = await createPostForUser(user.uid)
           router.push(`/dashboard/${newPostsId}`)
         }}
       >
-        Create post
+        New post
       </Button>
 
       <ul
@@ -78,8 +129,33 @@ export default function Dashboard() {
             key={post.id}
             css={css`
               margin: 1rem 0;
+              display: flex;
+              a {
+                margin-left: 3rem;
+              }
+
+              @media (max-width: 720px) {
+                display: block;
+                margin: 2rem 0;
+
+                a {
+                  margin: 0;
+                }
+                p {
+                  margin-bottom: 0.75rem;
+                }
+              }
             `}
           >
+            <p
+              css={css`
+                width: 9rem;
+                font-size: 0.9rem;
+                color: ${theme.colors.grey[3]};
+              `}
+            >
+              <time>{post.lastEdited.toDate().toDateString()}</time>
+            </p>
             <Link href={`/dashboard/${post.id}`}>
               <a
                 style={{

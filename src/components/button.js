@@ -10,10 +10,10 @@ const buttonStyles = css`
   outline: none;
   cursor: pointer;
 
-  padding: 0.75rem 1.5rem;
+  padding: 0.75em 1.5em;
   background: ${theme.colors.grey[5]};
   color: ${theme.colors.grey[1]};
-  border-radius: 0.33rem;
+  border-radius: 0.33em;
 
   border: none;
 
@@ -94,5 +94,36 @@ export function LinkButton(props) {
         {props.children}
       </a>
     </Link>
+  )
+}
+
+export function IconButton(props) {
+  return (
+    <button
+      css={css`
+        background: none;
+        border: none;
+        border-radius: 1rem;
+
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-family: 'Inter', sans-serif;
+        font-size: 1.25rem;
+
+        cursor: pointer;
+        transition: all 200ms ease;
+
+        &:hover {
+          background: ${theme.colors.grey[2]}30;
+        }
+      `}
+      {...props}
+    >
+      {props.children}
+    </button>
   )
 }

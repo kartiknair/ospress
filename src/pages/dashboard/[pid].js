@@ -2,7 +2,7 @@
 import firebase from 'firebase'
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 import { css } from '@emotion/react'
@@ -13,12 +13,14 @@ import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 
+import * as Dialog from '@radix-ui/react-dialog'
+
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 import { postWithUserIDAndSlugExists } from '../../lib/db'
 import theme from '../../lib/theme'
 
 import Container from '../../components/container'
-import Button from '../../components/button'
+import Button, { IconButton } from '../../components/button'
 import Input from '../../components/input'
 import Spinner from '../../components/spinner'
 import PostContainer from '../../components/post-container'
@@ -80,7 +82,7 @@ function Editor({ post }) {
   })
 
   return (
-    <Container maxWidth="560px">
+    <Container maxWidth="640px">
       <Head>
         <link
           href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap"
@@ -91,6 +93,15 @@ function Editor({ post }) {
       <div
         css={css`
           display: flex;
+          align-items: center;
+
+          button:first-child {
+            margin-left: auto;
+          }
+
+          button:last-child {
+            margin-left: 1rem;
+          }
         `}
       >
         <Button
@@ -134,47 +145,167 @@ function Editor({ post }) {
         >
           Save changes
         </Button>
-        <Button
-          css={css`
-            font-size: 0.9rem;
-          `}
-          onClick={async () => {
-            await firebase
-              .firestore()
-              .collection('posts')
-              .doc(post.id)
-              .update({ published: !post.published })
-          }}
-        >
-          {post.published ? 'Make Draft' : 'Publish'}
-        </Button>
-      </div>
 
-      <div
-        css={css`
-          margin-top: 5rem;
-          margin-bottom: 1rem;
-        `}
-      >
-        <label
-          htmlFor="post-slug"
-          css={css`
-            display: block;
-            margin-bottom: 0.5rem;
-          `}
-        >
-          Slug
-        </label>
-        <Input
-          type="text"
-          id="post-slug"
-          value={clientPost.slug}
-          onChange={e => {
-            setSlugErr(false)
-            setClientPost(prevPost => ({ ...prevPost, slug: e.target.value }))
-          }}
-        />
-        {slugErr && <p>Invalid slug. That slug is already in use.</p>}
+        <Dialog.Root>
+          <Dialog.Trigger as={IconButton}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1.5rem"
+              height="1.5rem"
+              fill={theme.colors.grey[4]}
+              viewBox="0 0 256 256"
+            >
+              <rect width="256" height="256" fill="none"></rect>
+              <circle cx="128" cy="128" r="12"></circle>
+              <circle cx="128" cy="64" r="12"></circle>
+              <circle cx="128" cy="192" r="12"></circle>
+            </svg>
+          </Dialog.Trigger>
+
+          <Dialog.Overlay
+            css={css`
+              background: ${theme.colors.grey[5]}40;
+              position: fixed;
+              inset: 0;
+            `}
+          />
+
+          <Dialog.Content
+            css={css`
+              background: ${theme.colors.grey[1]};
+              border-radius: 0.5rem;
+              padding: 1.5rem;
+              position: fixed;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            `}
+          >
+            <Dialog.Title>Post Settings</Dialog.Title>
+            <Dialog.Description
+              css={css`
+                margin: 1rem 0 0.5rem 0;
+                max-width: 20rem;
+                color: ${theme.colors.grey[3]};
+                font-size: 0.9rem;
+              `}
+            >
+              Make changes to your post's metadata, changes are saved
+              automatically.
+            </Dialog.Description>
+            <div
+              css={css`
+                margin: 1.5rem 0;
+              `}
+            >
+              <label
+                htmlFor="post-slug"
+                css={css`
+                  display: block;
+                  margin-bottom: 0.5rem;
+                `}
+              >
+                Slug
+              </label>
+              <Input
+                type="text"
+                id="post-slug"
+                value={clientPost.slug}
+                onChange={e => {
+                  setSlugErr(false)
+                  setClientPost(prevPost => ({
+                    ...prevPost,
+                    slug: e.target.value,
+                  }))
+                }}
+              />
+              {slugErr && <p>Invalid slug. That slug is already in use.</p>}
+            </div>
+
+            <div
+              css={css`
+                display: flex;
+
+                button {
+                  margin-left: 0;
+                  margin-right: 1rem;
+                }
+
+                button:last-child {
+                  margin-right: auto;
+                }
+
+                button {
+                  font-size: 0.9rem;
+                }
+              `}
+            >
+              <Button
+                onClick={async () => {
+                  await firebase
+                    .firestore()
+                    .collection('posts')
+                    .doc(post.id)
+                    .update({ published: !post.published })
+                }}
+              >
+                {post.published ? 'Make Draft' : 'Publish'}
+              </Button>
+              <Button
+                type="outline"
+                onClick={async () => {
+                  await firebase
+                    .firestore()
+                    .collection('posts')
+                    .doc(post.id)
+                    .delete()
+                  router.push('/dashboard')
+                }}
+              >
+                Delete
+              </Button>
+            </div>
+
+            <Dialog.Close
+              as={IconButton}
+              css={css`
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+              `}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1rem"
+                height="1rem"
+                fill="currentColor"
+                viewBox="0 0 256 256"
+              >
+                <rect width="256" height="256" fill="none"></rect>
+                <line
+                  x1="200"
+                  y1="56"
+                  x2="56"
+                  y2="200"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="16"
+                ></line>
+                <line
+                  x1="200"
+                  y1="200"
+                  x2="56"
+                  y2="56"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="16"
+                ></line>
+              </svg>
+            </Dialog.Close>
+          </Dialog.Content>
+        </Dialog.Root>
       </div>
 
       <div
