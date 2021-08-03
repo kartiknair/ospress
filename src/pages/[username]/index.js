@@ -102,7 +102,7 @@ export default function Profile({ user }) {
                     margin-bottom: 0.6rem;
                   `}
                 >
-                  {post.title}
+                  {post.title || 'Untitled'}
                 </h3>
 
                 <p

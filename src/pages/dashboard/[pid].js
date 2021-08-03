@@ -12,6 +12,7 @@ import StarterKit from '@tiptap/starter-kit'
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
+import Placeholder from '@tiptap/extension-placeholder'
 
 import * as Dialog from '@radix-ui/react-dialog'
 
@@ -46,7 +47,14 @@ function Editor({ post }) {
 
   const titleEditor = useEditor({
     content: post.title,
-    extensions: [ParagraphDocument, Paragraph, Text],
+    extensions: [
+      ParagraphDocument,
+      Paragraph,
+      Text,
+      Placeholder.configure({
+        placeholder: "Your post's title...",
+      }),
+    ],
     onUpdate: ({ editor: newEditor }) => {
       setClientPost(prevPost => ({
         ...prevPost,
@@ -57,7 +65,14 @@ function Editor({ post }) {
 
   const excerptEditor = useEditor({
     content: post.excerpt,
-    extensions: [ParagraphDocument, Paragraph, Text],
+    extensions: [
+      ParagraphDocument,
+      Paragraph,
+      Text,
+      Placeholder.configure({
+        placeholder: 'A short excerpt describing your post...',
+      }),
+    ],
     onUpdate: ({ editor: newEditor }) => {
       setClientPost(prevPost => ({
         ...prevPost,
@@ -75,6 +90,7 @@ function Editor({ post }) {
           levels: [1, 2, 3],
         },
       }),
+      Placeholder,
     ],
     onUpdate: ({ editor: newEditor }) => {
       setClientPost(prevPost => ({ ...prevPost, content: newEditor.getHTML() }))
@@ -310,10 +326,6 @@ function Editor({ post }) {
 
       <div
         css={css`
-          .ProseMirror-focused {
-            outline: none;
-          }
-
           margin-top: 5rem;
           font-size: 1.5rem;
           font-weight: 500;

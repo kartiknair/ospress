@@ -97,7 +97,7 @@ export async function setPost(id, data) {
 
 export async function createPostForUser(userId) {
   const doc = await firebase.firestore().collection('posts').add({
-    title: 'Untitled',
+    title: '',
     excerpt: '',
     content: '',
     author: userId,

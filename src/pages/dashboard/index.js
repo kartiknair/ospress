@@ -128,7 +128,7 @@ export default function Dashboard() {
           <li
             key={post.id}
             css={css`
-              margin: 1rem 0;
+              margin: 1.5rem 0;
               display: flex;
               a {
                 margin-left: 3rem;
@@ -164,7 +164,21 @@ export default function Dashboard() {
                   borderBottom: `1px dotted ${theme.colors.grey[2]}`,
                 }}
               >
-                {!post.published && '[DRAFT]'} {post.title}
+                {!post.published && (
+                  <span
+                    css={css`
+                      display: inline-block;
+                      background: ${theme.colors.grey[2]}40;
+                      color: ${theme.colors.grey[3]};
+                      padding: 0.25rem;
+                      border-radius: 0.25rem;
+                      font-size: 0.9rem;
+                    `}
+                  >
+                    DRAFT
+                  </span>
+                )}{' '}
+                {post.title || 'Untitled'}
               </a>
             </Link>
           </li>

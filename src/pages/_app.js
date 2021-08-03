@@ -56,6 +56,20 @@ const App = ({ Component, pageProps }) => (
             font-size: 90%;
           }
         }
+
+        // Proesemirror
+        .ProseMirror-focused {
+          outline: none;
+        }
+
+        .ProseMirror .is-editor-empty:first-child::before {
+          content: attr(data-placeholder);
+          float: left;
+          color: inherit;
+          opacity: 0.5;
+          pointer-events: none;
+          height: 0;
+        }
       `}
     />
     <Component {...pageProps} />
