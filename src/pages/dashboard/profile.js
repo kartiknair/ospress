@@ -19,6 +19,20 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
 }
 
+const StyledLabel = props => (
+  <label
+    css={css`
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: ${theme.colors.grey[3]};
+    `}
+    {...props}
+  >
+    {props.children}
+  </label>
+)
+
 function Editor({ user }) {
   const [clientUser, setClientUser] = useState({
     name: '',
@@ -80,90 +94,66 @@ function Editor({ user }) {
 
       <div
         css={css`
-          margin-top: 2.5rem;
-          margin-bottom: 1rem;
-        `}
-      >
-        <label
-          htmlFor="profile-display-name"
-          css={css`
-            display: block;
-            margin-bottom: 0.5rem;
-          `}
-        >
-          Display Name
-        </label>
-        <Input
-          id="profile-display-name"
-          type="text"
-          value={clientUser.displayName}
-          onChange={e =>
-            setClientUser(prevUser => ({
-              ...prevUser,
-              displayName: e.target.value,
-            }))
-          }
-        />
-      </div>
+          margin-top: 5rem;
 
-      <div
-        css={css`
-          margin-bottom: 1rem;
-        `}
-      >
-        <label
-          htmlFor="profile-username"
-          css={css`
-            display: block;
-            margin-bottom: 0.5rem;
-          `}
-        >
-          Name
-        </label>
-        <Input
-          id="profile-username"
-          type="text"
-          value={clientUser.name}
-          onChange={e => {
-            setUsernameErr(false)
-            setClientUser(prevUser => ({ ...prevUser, name: e.target.value }))
-          }}
-        />
-        {usernameErr !== null && (
-          <p
-            css={css`
-              font-size: 0.9rem;
-              color: ${theme.colors.grey[3]};
-              width: 20rem;
-              margin-top: 1rem;
-            `}
-          >
-            {usernameErr}
-          </p>
-        )}
-      </div>
-
-      <div
-        css={css`
-          margin-bottom: 1rem;
-        `}
-      >
-        <label
-          htmlFor="profile-about"
-          css={css`
-            display: block;
-            margin-bottom: 0.5rem;
-          `}
-        >
-          About
-        </label>
-        <Textarea
-          id="profile-about"
-          value={clientUser.about}
-          onChange={e =>
-            setClientUser(prevUser => ({ ...prevUser, about: e.target.value }))
+          div {
+            margin-bottom: 1.5rem;
           }
-        />
+        `}
+      >
+        <div>
+          <StyledLabel htmlFor="profile-display-name">Display Name</StyledLabel>
+          <Input
+            id="profile-display-name"
+            type="text"
+            value={clientUser.displayName}
+            onChange={e =>
+              setClientUser(prevUser => ({
+                ...prevUser,
+                displayName: e.target.value,
+              }))
+            }
+          />
+        </div>
+
+        <div>
+          <StyledLabel htmlFor="profile-username">Name</StyledLabel>
+          <Input
+            id="profile-username"
+            type="text"
+            value={clientUser.name}
+            onChange={e => {
+              setUsernameErr(false)
+              setClientUser(prevUser => ({ ...prevUser, name: e.target.value }))
+            }}
+          />
+          {usernameErr !== null && (
+            <p
+              css={css`
+                font-size: 0.9rem;
+                color: ${theme.colors.grey[3]};
+                width: 20rem;
+                margin-top: 1rem;
+              `}
+            >
+              {usernameErr}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <StyledLabel htmlFor="profile-about">About</StyledLabel>
+          <Textarea
+            id="profile-about"
+            value={clientUser.about}
+            onChange={e =>
+              setClientUser(prevUser => ({
+                ...prevUser,
+                about: e.target.value,
+              }))
+            }
+          />
+        </div>
       </div>
     </Container>
   )

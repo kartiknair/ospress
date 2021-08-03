@@ -18,6 +18,17 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
 }
 
+function formatDate(date) {
+  const year = date.getFullYear()
+  let month = '' + (date.getMonth() + 1)
+  let day = '' + date.getDate()
+
+  if (month.length < 2) month = '0' + month
+  if (day.length < 2) day = '0' + day
+
+  return [day, month, year].join('-')
+}
+
 export default function Dashboard() {
   const router = useRouter()
 
@@ -149,12 +160,12 @@ export default function Dashboard() {
           >
             <p
               css={css`
-                width: 9rem;
+                width: 7rem;
                 font-size: 0.9rem;
                 color: ${theme.colors.grey[3]};
               `}
             >
-              <time>{post.lastEdited.toDate().toDateString()}</time>
+              <time>{formatDate(post.lastEdited.toDate())}</time>
             </p>
             <Link href={`/dashboard/${post.id}`}>
               <a
