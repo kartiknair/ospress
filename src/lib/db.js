@@ -60,6 +60,15 @@ export async function getPostByID(id) {
   return { id: doc.id, ...doc.data() }
 }
 
+export async function removePostForUser(uid, pid) {
+  await firebase.firestore().collection('posts').doc(pid).delete()
+  firebase
+    .firestore()
+    .collection('users')
+    .doc(uid)
+    .update({ posts: firebase.firestore.FieldValue.arrayRemove(pid) })
+}
+
 export async function postWithIDExists(id) {
   const doc = await firebase.firestore().collection('posts').doc(id).get()
   return doc.exists

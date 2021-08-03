@@ -10,7 +10,6 @@ import FIREBASE_CONIFG from '../../lib/firebase-config'
 import theme from '../../lib/theme'
 
 import Container from '../../components/container'
-import PostFonts from '../../components/post-fonts'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -28,7 +27,10 @@ export default function Profile({ user }) {
   return (
     <Container maxWidth="640px">
       <Head>
-        <PostFonts />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600"
+          rel="stylesheet"
+        />
       </Head>
 
       <img
@@ -60,6 +62,7 @@ export default function Profile({ user }) {
       </p>
 
       <ul
+        id="posts"
         css={css`
           list-style: none;
           margin-top: 3rem;
@@ -145,6 +148,7 @@ export async function getStaticProps({ params }) {
       props: { user },
     }
   } catch (err) {
+    console.log(err)
     return { notFound: true }
   }
 }

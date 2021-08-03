@@ -10,7 +10,6 @@ import FIREBASE_CONIFG from '../../lib/firebase-config'
 import theme from '../../lib/theme'
 
 import Container from '../../components/container'
-import PostFonts from '../../components/post-fonts'
 import PostContainer from '../../components/post-container'
 
 if (firebase.apps.length === 0) {
@@ -21,7 +20,14 @@ export default function Post({ post }) {
   return (
     <Container maxWidth="640px">
       <Head>
-        <PostFonts />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono"
+          rel="stylesheet"
+        />
       </Head>
 
       <h1
@@ -108,6 +114,7 @@ export async function getStaticProps({ params }) {
       props: { post, revalidate: 1 },
     }
   } catch (err) {
+    console.log(err)
     return { notFound: true }
   }
 }

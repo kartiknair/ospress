@@ -19,11 +19,10 @@ import * as Dialog from '@radix-ui/react-dialog'
 import tinykeys from 'tinykeys'
 
 import FIREBASE_CONIFG from '../../lib/firebase-config'
-import { postWithUserIDAndSlugExists } from '../../lib/db'
+import { postWithUserIDAndSlugExists, removePostForUser } from '../../lib/db'
 import theme from '../../lib/theme'
 
 import Container from '../../components/container'
-import PostFonts from '../../components/post-fonts'
 import Button, { IconButton } from '../../components/button'
 import Input from '../../components/input'
 import Spinner from '../../components/spinner'
@@ -139,7 +138,14 @@ function Editor({ post }) {
   return (
     <Container maxWidth="640px">
       <Head>
-        <PostFonts />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono"
+          rel="stylesheet"
+        />
       </Head>
 
       <div
@@ -283,11 +289,7 @@ function Editor({ post }) {
               <Button
                 type="outline"
                 onClick={async () => {
-                  await firebase
-                    .firestore()
-                    .collection('posts')
-                    .doc(post.id)
-                    .delete()
+                  await removePostForUser(post.author, post.id)
                   router.push('/dashboard')
                 }}
               >
