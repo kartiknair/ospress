@@ -16,6 +16,8 @@ import Placeholder from '@tiptap/extension-placeholder'
 
 import * as Dialog from '@radix-ui/react-dialog'
 
+import tinykeys from 'tinykeys'
+
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 import { postWithUserIDAndSlugExists } from '../../lib/db'
 import theme from '../../lib/theme'
@@ -39,10 +41,46 @@ function Editor({ post }) {
     excerpt: '',
     published: true,
   })
+
   const [slugErr, setSlugErr] = useState(false)
+
   useEffect(() => {
     setClientPost(post)
   }, [])
+
+  async function saveChanges() {
+    if (clientPost.slug !== post.slug) {
+      let slugClashing = await postWithUserIDAndSlugExists(
+        post.author,
+        clientPost.slug,
+      )
+      if (slugClashing) {
+        setSlugErr(true)
+        return
+      }
+    }
+
+    let toSave = {
+      ...clientPost,
+      lastEdited: firebase.firestore.Timestamp.now(),
+    }
+    delete toSave.id // since we get the id from the document not the data
+    await firebase.firestore().collection('posts').doc(post.id).set(toSave)
+    setSlugErr(false)
+  }
+
+  useEffect(() => {
+    let unsubscribe = tinykeys(window, {
+      '$mod+KeyS': e => {
+        e.preventDefault()
+        saveChanges()
+      },
+    })
+
+    return () => {
+      unsubscribe()
+    }
+  })
 
   const ParagraphDocument = Document.extend({ content: 'paragraph' })
 
@@ -132,30 +170,7 @@ function Editor({ post }) {
             post.excerpt === clientPost.excerpt &&
             !slugErr
           }
-          onClick={async () => {
-            if (clientPost.slug !== post.slug) {
-              let slugClashing = await postWithUserIDAndSlugExists(
-                post.author,
-                clientPost.slug,
-              )
-              if (slugClashing) {
-                setSlugErr(true)
-                return
-              }
-            }
-
-            let toSave = {
-              ...clientPost,
-              lastEdited: firebase.firestore.Timestamp.now(),
-            }
-            delete toSave.id // since we get the id from the document not the data
-            await firebase
-              .firestore()
-              .collection('posts')
-              .doc(post.id)
-              .set(toSave)
-            setSlugErr(false)
-          }}
+          onClick={saveChanges}
         >
           Save changes
         </Button>
