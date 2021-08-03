@@ -10,6 +10,7 @@ import FIREBASE_CONIFG from '../../lib/firebase-config'
 import theme from '../../lib/theme'
 
 import Container from '../../components/container'
+import PostFonts from '../../components/post-fonts'
 import PostContainer from '../../components/post-container'
 
 if (firebase.apps.length === 0) {
@@ -20,10 +21,7 @@ export default function Post({ post }) {
   return (
     <Container maxWidth="640px">
       <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap"
-          rel="stylesheet"
-        />
+        <PostFonts />
       </Head>
 
       <h1

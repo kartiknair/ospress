@@ -21,6 +21,7 @@ import { postWithUserIDAndSlugExists } from '../../lib/db'
 import theme from '../../lib/theme'
 
 import Container from '../../components/container'
+import PostFonts from '../../components/post-fonts'
 import Button, { IconButton } from '../../components/button'
 import Input from '../../components/input'
 import Spinner from '../../components/spinner'
@@ -100,10 +101,7 @@ function Editor({ post }) {
   return (
     <Container maxWidth="640px">
       <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap"
-          rel="stylesheet"
-        />
+        <PostFonts />
       </Head>
 
       <div

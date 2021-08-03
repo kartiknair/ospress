@@ -51,11 +51,26 @@ const PostContainer = props => (
 
       pre {
         background: ${theme.colors.grey[5]};
-        color: ${theme.colors.grey[2]};
-        font-size: 1rem;
         font-family: monospace;
         border-radius: 0.5rem;
         padding: 1rem 1.5rem;
+      }
+
+      code {
+        font-size: 0.9rem;
+        font-family: 'JetBrains Mono', monospace;
+
+        background: ${theme.colors.grey[2]}60;
+        color: ${theme.colors.grey[4]};
+        border-radius: 0.2rem;
+        padding: 0.2rem;
+      }
+
+      pre code {
+        background: none;
+        color: ${theme.colors.grey[2]};
+        border-radius: 0;
+        padding: 0;
       }
     `}
     {...props}
