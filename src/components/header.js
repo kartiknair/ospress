@@ -8,13 +8,12 @@ const Header = props => (
       display: flex;
       margin-bottom: 5rem;
 
-      a:first-child {
+      a:first-of-type {
         margin-left: auto;
       }
 
       a {
         display: block;
-        margin-right: 1.5rem;
         text-decoration: none;
       }
 
@@ -22,6 +21,7 @@ const Header = props => (
       button {
         color: ${theme.colors.grey[2]};
         cursor: pointer;
+        margin-right: 1.5rem;
         transition: all 200ms ease;
       }
 
@@ -30,14 +30,13 @@ const Header = props => (
         color: ${theme.colors.grey[3]};
       }
 
-      button {
+      button:last-of-type {
         margin-right: 0;
       }
 
       button {
         border: none;
         padding: 0;
-        margin: 0;
         background: none;
       }
     `}

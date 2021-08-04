@@ -10,6 +10,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import Header from '../../components/header'
 import Spinner from '../../components/spinner'
 import Container from '../../components/container'
+import ProfileSettingsModal from '../../components/profile-settings-modal'
 
 import theme from '../../lib/theme'
 import { truncate } from '../../lib/utils'
@@ -114,26 +115,34 @@ export default function ReadingList() {
     }
   }, [user, userLoading, userError])
 
-  if (userLoading) {
-    return <Spinner />
-  } else if (userError) {
-    return (
-      <>
-        <p>Oop, we've had an error:</p>
-        <pre>{JSON.stringify(error)}</pre>
-      </>
-    )
-  }
-
   return (
     <>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600"
-          rel="stylesheet"
-        />
-      </Head>
-      <List uid={user.uid} />
+      <Header>
+        <Link href="/dashboard">
+          <a>Dashboard</a>
+        </Link>
+        <ProfileSettingsModal Trigger={() => 'Profile'} uid={user?.uid} />
+        <button onClick={() => firebase.auth().signOut()}>Sign Out</button>
+      </Header>
+
+      {userLoading ? (
+        <Spinner />
+      ) : userError ? (
+        <>
+          <p>Oop, we've had an error:</p>
+          <pre>{JSON.stringify(error)}</pre>
+        </>
+      ) : (
+        <>
+          <Head>
+            <link
+              href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600"
+              rel="stylesheet"
+            />
+          </Head>
+          <List uid={user.uid} />
+        </>
+      )}
     </>
   )
 }
@@ -145,15 +154,6 @@ ReadingList.getLayout = page => (
       margin-top: 5rem;
     `}
   >
-    <Header>
-      <Link href="/dashboard">
-        <a>Dashboard</a>
-      </Link>
-      <Link href="/dashboard/profile">
-        <a>Profile</a>
-      </Link>
-      <button onClick={() => firebase.auth().signOut()}>Sign Out</button>
-    </Header>
     {page}
   </Container>
 )

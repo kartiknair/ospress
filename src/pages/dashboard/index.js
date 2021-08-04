@@ -15,6 +15,7 @@ import Button from '../../components/button'
 import Header from '../../components/header'
 import Spinner from '../../components/spinner'
 import Container from '../../components/container'
+import ProfileSettingsModal from '../../components/profile-settings-modal'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -50,99 +51,107 @@ export default function Dashboard() {
     }
   }, [user, userLoading, userError])
 
-  if (userLoading || postsLoading) {
-    return <Spinner />
-  } else if (userError || postsError) {
-    return (
-      <>
-        <p>Oop, we've had an error:</p>
-        <pre>{JSON.stringify(error)}</pre>
-      </>
-    )
-  }
-
   return (
     <>
-      <Button
-        type="outline"
-        css={css`
-          font-size: 0.9rem;
-          margin-right: auto;
-        `}
-        onClick={async () => {
-          const newPostsId = await createPostForUser(user.uid)
-          router.push(`/dashboard/${newPostsId}`)
-        }}
-      >
-        New post
-      </Button>
+      <Header>
+        <Link href="/dashboard/list">
+          <a>Reading List</a>
+        </Link>
+        <ProfileSettingsModal Trigger={() => 'Profile'} uid={user?.uid} />
+        <button onClick={() => firebase.auth().signOut()}>Sign Out</button>
+      </Header>
 
-      <ul
-        css={css`
-          margin-top: 3.5rem;
-          list-style: none;
-        `}
-      >
-        {posts.map(post => (
-          <li
-            key={post.id}
+      {userLoading || postsLoading ? (
+        <Spinner />
+      ) : userError || postsError ? (
+        <>
+          <p>Oop, we've had an error:</p>
+          <pre>{JSON.stringify(error)}</pre>
+        </>
+      ) : (
+        <>
+          <Button
+            type="outline"
             css={css`
-              margin: 1.5rem 0;
-              display: flex;
-              a {
-                margin-left: 3rem;
-              }
+              font-size: 0.9rem;
+              margin-right: auto;
+            `}
+            onClick={async () => {
+              const newPostsId = await createPostForUser(user.uid)
+              router.push(`/dashboard/${newPostsId}`)
+            }}
+          >
+            New post
+          </Button>
 
-              @media (max-width: 720px) {
-                display: block;
-                margin: 2rem 0;
-
-                a {
-                  margin: 0;
-                }
-                p {
-                  margin-bottom: 0.75rem;
-                }
-              }
+          <ul
+            css={css`
+              margin-top: 3.5rem;
+              list-style: none;
             `}
           >
-            <p
-              css={css`
-                width: 7rem;
-                font-size: 0.9rem;
-                color: ${theme.colors.grey[3]};
-              `}
-            >
-              <time>{formatDate(post.lastEdited.toDate())}</time>
-            </p>
-            <Link href={`/dashboard/${post.id}`}>
-              <a
-                style={{
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  borderBottom: `1px dotted ${theme.colors.grey[2]}`,
-                }}
+            {posts.map(post => (
+              <li
+                key={post.id}
+                css={css`
+                  margin: 1.5rem 0;
+                  display: flex;
+                  a {
+                    margin-left: 3rem;
+                  }
+
+                  @media (max-width: 720px) {
+                    display: block;
+                    margin: 2rem 0;
+
+                    a {
+                      margin: 0;
+                    }
+                    p {
+                      margin-bottom: 0.75rem;
+                    }
+                  }
+                `}
               >
-                {!post.published && (
-                  <span
-                    css={css`
-                      display: inline-block;
-                      background: ${theme.colors.grey[2]}40;
-                      color: ${theme.colors.grey[3]};
-                      padding: 0.25rem;
-                      border-radius: 0.25rem;
-                      font-size: 0.9rem;
-                    `}
+                <p
+                  css={css`
+                    width: 7rem;
+                    font-size: 0.9rem;
+                    color: ${theme.colors.grey[3]};
+                  `}
+                >
+                  <time>{formatDate(post.lastEdited.toDate())}</time>
+                </p>
+                <Link href={`/dashboard/${post.id}`}>
+                  <a
+                    style={{
+                      textDecoration: 'none',
+                      color: 'inherit',
+                      borderBottom: `1px dotted ${theme.colors.grey[2]}`,
+                    }}
                   >
-                    DRAFT
-                  </span>
-                )}{' '}
-                {post.title || 'Untitled'}
-              </a>
-            </Link>
-          </li>
-        ))}
-      </ul>
+                    {!post.published && (
+                      <span
+                        css={css`
+                          display: inline-block;
+                          background: ${theme.colors.grey[2]}40;
+                          color: ${theme.colors.grey[3]};
+                          padding: 0.25rem;
+                          border-radius: 0.25rem;
+                          font-size: 0.9rem;
+                        `}
+                      >
+                        DRAFT
+                      </span>
+                    )}{' '}
+                    {post.title || 'Untitled'}
+                  </a>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </>
   )
 }
@@ -154,15 +163,6 @@ Dashboard.getLayout = page => (
       margin-top: 5rem;
     `}
   >
-    <Header>
-      <Link href="/dashboard/list">
-        <a>Reading List</a>
-      </Link>
-      <Link href="/dashboard/profile">
-        <a>Profile</a>
-      </Link>
-      <button onClick={() => firebase.auth().signOut()}>Sign Out</button>
-    </Header>
     {page}
   </Container>
 )

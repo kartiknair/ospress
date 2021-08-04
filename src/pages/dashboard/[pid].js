@@ -153,7 +153,7 @@ function Editor({ post }) {
           display: flex;
           align-items: center;
 
-          button:first-child {
+          button:first-of-type {
             margin-left: auto;
           }
 

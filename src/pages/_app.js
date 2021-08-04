@@ -54,7 +54,7 @@ const App = ({ Component, pageProps }) => {
             outline: none;
           }
 
-          .ProseMirror .is-editor-empty:first-child::before {
+          .ProseMirror .is-editor-empty:first-of-type::before {
             content: attr(data-placeholder);
             float: left;
             color: inherit;
