@@ -1,19 +1,21 @@
 /** @jsxImportSource @emotion/react */
+import Link from 'next/link'
 import firebase from 'firebase'
-import { useEffect, useState } from 'react'
+import { css } from '@emotion/react'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
-import { css } from '@emotion/react'
 
-import FIREBASE_CONIFG from '../../lib/firebase-config'
-import { userWithNameExists } from '../../lib/db'
-
-import Container from '../../components/container'
-import Button from '../../components/button'
-import Input, { Textarea } from '../../components/input'
-import Spinner from '../../components/spinner'
 import theme from '../../lib/theme'
+import { userWithNameExists } from '../../lib/db'
+import FIREBASE_CONIFG from '../../lib/firebase-config'
+
+import Header from '../../components/header'
+import Button from '../../components/button'
+import Spinner from '../../components/spinner'
+import Container from '../../components/container'
+import Input, { Textarea } from '../../components/input'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -38,6 +40,9 @@ function Editor({ user }) {
     name: '',
     displayName: '',
     about: '',
+    posts: [],
+    photo: '',
+    readingList: [],
   })
   const [usernameErr, setUsernameErr] = useState(null)
 
@@ -46,7 +51,7 @@ function Editor({ user }) {
   }, [])
 
   return (
-    <Container maxWidth="560px">
+    <>
       <Button
         css={css`
           margin-left: auto;
@@ -155,7 +160,7 @@ function Editor({ user }) {
           />
         </div>
       </div>
-    </Container>
+    </>
   )
 }
 
@@ -181,19 +186,35 @@ export default function ProfileEditor() {
 
   if (userError || userdataError) {
     return (
-      <Container maxWidth="560px">
+      <>
         <p>Oop, we've had an error:</p>
         <pre>{JSON.stringify(userError)}</pre>
         <pre>{JSON.stringify(userdataError)}</pre>
-      </Container>
+      </>
     )
   } else if (userdata) {
     return <Editor user={userdata} />
   }
 
-  return (
-    <Container maxWidth="560px">
-      <Spinner />
-    </Container>
-  )
+  return <Spinner />
 }
+
+ProfileEditor.getLayout = page => (
+  <Container
+    maxWidth="640px"
+    css={css`
+      margin-top: 5rem;
+    `}
+  >
+    <Header>
+      <Link href="/dashboard">
+        <a>Dashboard</a>
+      </Link>
+      <Link href="/dashboard/list">
+        <a>Reading List</a>
+      </Link>
+      <button onClick={() => firebase.auth().signOut()}>Sign Out</button>
+    </Header>
+    {page}
+  </Container>
+)

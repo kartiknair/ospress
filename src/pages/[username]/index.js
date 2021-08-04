@@ -6,6 +6,7 @@ import { css } from '@emotion/react'
 import { htmlToText } from 'html-to-text'
 
 import { getUserByName } from '../../lib/db'
+import { truncate } from '../../lib/utils'
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 import theme from '../../lib/theme'
 
@@ -13,14 +14,6 @@ import Container from '../../components/container'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
-}
-
-const truncate = (words, maxWords) => {
-  const split = words.split(' ')
-
-  if (split.length <= maxWords) return words
-
-  return split.slice(0, maxWords).join(' ') + '...'
 }
 
 export default function Profile({ user }) {

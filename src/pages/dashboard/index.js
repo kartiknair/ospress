@@ -1,18 +1,20 @@
 /** @jsxImportSource @emotion/react */
+import Link from 'next/link'
 import firebase from 'firebase'
 import { useEffect } from 'react'
+import { css } from '@emotion/react'
+import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-import { css } from '@emotion/react'
 
-import FIREBASE_CONIFG from '../../lib/firebase-config'
+import theme from '../../lib/theme'
 import { createPostForUser } from '../../lib/db'
+import FIREBASE_CONIFG from '../../lib/firebase-config'
+
 import Button from '../../components/button'
+import Header from '../../components/header'
 import Spinner from '../../components/spinner'
 import Container from '../../components/container'
-import theme from '../../lib/theme'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -49,72 +51,18 @@ export default function Dashboard() {
   }, [user, userLoading, userError])
 
   if (userLoading || postsLoading) {
-    return (
-      <Container maxWidth="420px">
-        <Spinner />
-      </Container>
-    )
+    return <Spinner />
   } else if (userError || postsError) {
     return (
-      <Container maxWidth="420px">
+      <>
         <p>Oop, we've had an error:</p>
         <pre>{JSON.stringify(error)}</pre>
-      </Container>
+      </>
     )
   }
 
   return (
-    <Container
-      maxWidth="640px"
-      css={css`
-        margin-top: 5rem;
-      `}
-    >
-      <header
-        css={css`
-          display: flex;
-          margin-bottom: 5rem;
-
-          a:first-child {
-            margin-left: auto;
-          }
-
-          a {
-            display: block;
-            margin-right: 1.5rem;
-            text-decoration: none;
-          }
-
-          a,
-          button {
-            color: ${theme.colors.grey[2]};
-            cursor: pointer;
-            transition: all 200ms ease;
-          }
-
-          a:hover,
-          button:hover {
-            color: ${theme.colors.grey[3]};
-          }
-
-          button {
-            margin-right: 0;
-          }
-
-          button {
-            border: none;
-            padding: 0;
-            margin: 0;
-            background: none;
-          }
-        `}
-      >
-        <Link href="/dashboard/profile">
-          <a>Profile</a>
-        </Link>
-        <button onClick={() => firebase.auth().signOut()}>Sign Out</button>
-      </header>
-
+    <>
       <Button
         type="outline"
         css={css`
@@ -195,6 +143,26 @@ export default function Dashboard() {
           </li>
         ))}
       </ul>
-    </Container>
+    </>
   )
 }
+
+Dashboard.getLayout = page => (
+  <Container
+    maxWidth="640px"
+    css={css`
+      margin-top: 5rem;
+    `}
+  >
+    <Header>
+      <Link href="/dashboard/list">
+        <a>Reading List</a>
+      </Link>
+      <Link href="/dashboard/profile">
+        <a>Profile</a>
+      </Link>
+      <button onClick={() => firebase.auth().signOut()}>Sign Out</button>
+    </Header>
+    {page}
+  </Container>
+)

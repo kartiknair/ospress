@@ -74,6 +74,7 @@ export default function Home() {
                     about: 'Nothing to say about you.',
                     posts: [],
                     photo: cred.user.photoURL,
+                    readingList: [],
                   })
                 }
               })
