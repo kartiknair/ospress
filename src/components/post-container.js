@@ -1,12 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 
-import theme from '../lib/theme'
-
 const PostContainer = props => (
   <div
     css={css`
-      color: ${theme.colors.grey[4]};
+      color: var(--grey-4);
       margin-top: 2rem;
       font-size: 1.125rem;
       line-height: 1.5em;
@@ -46,11 +44,11 @@ const PostContainer = props => (
       blockquote > p {
         font-family: 'Inter', sans-serif;
         padding-left: 1.25rem;
-        border-left: 0.15rem solid ${theme.colors.grey[2]};
+        border-left: 0.15rem solid var(--grey-2);
       }
 
       pre {
-        background: ${theme.colors.grey[5]};
+        background: var(--grey-5);
         font-family: monospace;
         border-radius: 0.5rem;
         padding: 1rem 1.5rem;
@@ -60,17 +58,30 @@ const PostContainer = props => (
         font-size: 0.9rem;
         font-family: 'JetBrains Mono', monospace;
 
-        background: ${theme.colors.grey[2]}60;
-        color: ${theme.colors.grey[4]};
+        background: rgba(0, 0, 0, 0.1);
+        color: var(--grey-4);
         border-radius: 0.2rem;
         padding: 0.2rem;
       }
 
       pre code {
         background: none;
-        color: ${theme.colors.grey[2]};
+        color: var(--grey-2);
         border-radius: 0;
         padding: 0;
+      }
+
+      [data-theme='dark'] & {
+        pre {
+          background: var(--grey-2);
+        }
+        code {
+          background: var(--grey-2);
+        }
+        pre code {
+          background: none;
+          color: var(--grey-4);
+        }
       }
     `}
     {...props}

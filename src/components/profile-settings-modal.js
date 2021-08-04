@@ -5,12 +5,12 @@ import { useState, useEffect } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 
-import theme from '../lib/theme'
 import FIREBASE_CONIFG from '../lib/firebase-config'
 
 import Button from '../components/button'
 import Spinner from '../components/spinner'
 import { IconButton } from '../components/button'
+import ModalOverlay from '../components/modal-overlay'
 import Input, { Textarea } from '../components/input'
 
 if (firebase.apps.length === 0) {
@@ -23,7 +23,7 @@ const StyledLabel = props => (
       display: block;
       margin-bottom: 0.5rem;
       font-size: 0.9rem;
-      color: ${theme.colors.grey[3]};
+      color: var(--grey-3);
     `}
     {...props}
   >
@@ -102,7 +102,7 @@ function Editor({ user }) {
             <p
               css={css`
                 font-size: 0.9rem;
-                color: ${theme.colors.grey[3]};
+                color: var(--grey-3);
                 width: 20rem;
                 margin-top: 1rem;
               `}
@@ -204,17 +204,11 @@ export default function ProfileSettingsModal(props) {
         <props.Trigger />
       </Dialog.Trigger>
 
-      <Dialog.Overlay
-        css={css`
-          background: ${theme.colors.grey[5]}40;
-          position: fixed;
-          inset: 0;
-        `}
-      />
+      <ModalOverlay />
 
       <Dialog.Content
         css={css`
-          background: ${theme.colors.grey[1]};
+          background: var(--grey-1);
           border-radius: 0.5rem;
           padding: 1.5rem;
           position: fixed;
@@ -228,7 +222,7 @@ export default function ProfileSettingsModal(props) {
           css={css`
             margin: 1rem 0 0.5rem 0;
             max-width: 20rem;
-            color: ${theme.colors.grey[3]};
+            color: var(--grey-3);
             font-size: 0.9rem;
           `}
         >

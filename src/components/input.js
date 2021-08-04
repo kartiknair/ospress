@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import theme from '../lib/theme'
 import { css } from '@emotion/react'
 
 const inputStyles = css`
@@ -7,13 +6,13 @@ const inputStyles = css`
   width: 17em;
   padding: 0.75em 1.5em;
   background: none;
-  border: 1px solid ${theme.colors.grey[2]};
+  border: 1px solid var(--grey-2);
   outline: none;
   border-radius: 0.5rem;
 
-  color: ${theme.colors.grey[4]};
+  color: var(--grey-4);
   &::placeholder {
-    color: ${theme.colors.grey[3]};
+    color: var(--grey-3);
   }
 `
 

@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import theme from '../lib/theme'
 
 const Header = props => (
   <header
@@ -19,7 +18,7 @@ const Header = props => (
 
       a,
       button {
-        color: ${theme.colors.grey[2]};
+        color: var(--grey-2);
         cursor: pointer;
         margin-right: 1.5rem;
         transition: all 200ms ease;
@@ -27,7 +26,7 @@ const Header = props => (
 
       a:hover,
       button:hover {
-        color: ${theme.colors.grey[3]};
+        color: var(--grey-3);
       }
 
       button:last-of-type {

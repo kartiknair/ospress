@@ -2,8 +2,6 @@
 import { css } from '@emotion/react'
 import Link from 'next/link'
 
-import theme from '../lib/theme'
-
 const buttonStyles = css`
   display: block;
   border: none;
@@ -11,8 +9,8 @@ const buttonStyles = css`
   cursor: pointer;
 
   padding: 0.75em 1.5em;
-  background: ${theme.colors.grey[5]};
-  color: ${theme.colors.grey[1]};
+  background: var(--grey-5);
+  color: var(--grey-1);
   border-radius: 0.33em;
 
   border: none;
@@ -20,35 +18,35 @@ const buttonStyles = css`
   transition: all 200ms ease;
 
   &:hover {
-    background: ${theme.colors.grey[4]};
+    background: var(--grey-4);
   }
 
   &:disabled {
     cursor: not-allowed;
-    background: ${theme.colors.grey[4]};
-    color: ${theme.colors.grey[2]};
+    background: var(--grey-4);
+    color: var(--grey-2);
   }
 `
 
 const outlineButtonStyles = css`
   ${buttonStyles}
 
-  background: ${theme.colors.grey[1]};
-  color: ${theme.colors.grey[4]};
-  border: 1px solid ${theme.colors.grey[2]};
+  background: var(--grey-1);
+  color: var(--grey-4);
+  border: 1px solid var(--grey-2);
 
   &:hover {
-    background: ${theme.colors.grey[1]};
-    border: 1px solid ${theme.colors.grey[3]};
+    background: var(--grey-1);
+    border: 1px solid var(--grey-3);
   }
 
   &:disabled {
-    background: ${theme.colors.grey[1]};
-    color: ${theme.colors.grey[2]};
+    background: var(--grey-1);
+    color: var(--grey-2);
 
     &:hover {
-      background: ${theme.colors.grey[1]};
-      border: 1px solid ${theme.colors.grey[2]};
+      background: var(--grey-1);
+      border: 1px solid var(--grey-2);
     }
   }
 `
@@ -118,7 +116,8 @@ export function IconButton(props) {
         transition: all 200ms ease;
 
         &:hover {
-          background: ${theme.colors.grey[2]}30;
+          background: var(--grey-2);
+          opacity: 0.4;
         }
       `}
       {...props}

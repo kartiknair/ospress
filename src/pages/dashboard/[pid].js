@@ -20,13 +20,13 @@ import tinykeys from 'tinykeys'
 
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 import { postWithUserIDAndSlugExists, removePostForUser } from '../../lib/db'
-import theme from '../../lib/theme'
 
-import Container from '../../components/container'
-import Button, { IconButton } from '../../components/button'
 import Input from '../../components/input'
 import Spinner from '../../components/spinner'
+import Container from '../../components/container'
+import ModalOverlay from '../../components/modal-overlay'
 import PostContainer from '../../components/post-container'
+import Button, { IconButton } from '../../components/button'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -187,7 +187,7 @@ function Editor({ post }) {
               xmlns="http://www.w3.org/2000/svg"
               width="1.5rem"
               height="1.5rem"
-              fill={theme.colors.grey[4]}
+              fill="var(--grey-4)"
               viewBox="0 0 256 256"
             >
               <rect width="256" height="256" fill="none"></rect>
@@ -197,17 +197,11 @@ function Editor({ post }) {
             </svg>
           </Dialog.Trigger>
 
-          <Dialog.Overlay
-            css={css`
-              background: ${theme.colors.grey[5]}40;
-              position: fixed;
-              inset: 0;
-            `}
-          />
+          <ModalOverlay />
 
           <Dialog.Content
             css={css`
-              background: ${theme.colors.grey[1]};
+              background: var(--grey-1);
               border-radius: 0.5rem;
               padding: 1.5rem;
               position: fixed;
@@ -221,7 +215,7 @@ function Editor({ post }) {
               css={css`
                 margin: 1rem 0 0.5rem 0;
                 max-width: 20rem;
-                color: ${theme.colors.grey[3]};
+                color: var(--grey-3);
                 font-size: 0.9rem;
               `}
             >
@@ -358,7 +352,7 @@ function Editor({ post }) {
           margin: 1.5rem 0;
           font-size: 1.15rem;
           font-weight: 500;
-          color: ${theme.colors.grey[4]};
+          color: var(--grey-4);
         `}
       >
         <EditorContent editor={excerptEditor} />

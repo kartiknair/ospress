@@ -10,7 +10,6 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 
 import { getPostByUsernameAndSlug, getUserByID } from '../../lib/db'
 import FIREBASE_CONIFG from '../../lib/firebase-config'
-import theme from '../../lib/theme'
 
 import { IconButton } from '../../components/button'
 import Container from '../../components/container'
@@ -64,7 +63,7 @@ function AddToReadingListButton({ uid, pid }) {
         xmlns="http://www.w3.org/2000/svg"
         width="1.5rem"
         height="1.5rem"
-        fill={theme.colors.grey[3]}
+        fill="var(--grey-3)"
         viewBox="0 0 256 256"
       >
         <rect width="256" height="256" fill="none"></rect>
@@ -75,7 +74,7 @@ function AddToReadingListButton({ uid, pid }) {
             <path
               d="M168,224l-56.0074-40L56,224V72a8,8,0,0,1,8-8h96a8,8,0,0,1,8,8Z"
               fill="none"
-              stroke={theme.colors.grey[3]}
+              stroke="var(--grey-3)"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="16"
@@ -83,7 +82,7 @@ function AddToReadingListButton({ uid, pid }) {
             <path
               d="M88,64V40a8,8,0,0,1,8-8h96a8,8,0,0,1,8,8V192l-32-22.85412"
               fill="none"
-              stroke={theme.colors.grey[3]}
+              stroke="var(--grey-3)"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="16"
@@ -125,7 +124,7 @@ export default function Post({ post }) {
         css={css`
           display: flex;
           align-items: center;
-          color: ${theme.colors.grey[3]};
+          color: var(--grey-3);
         `}
       >
         <img
@@ -143,7 +142,7 @@ export default function Post({ post }) {
               style={{
                 color: 'inherit',
                 textDecoration: 'none',
-                borderBottom: `1px dotted ${theme.colors.grey[2]}`,
+                borderBottom: `1px dotted var(--grey-2)`,
               }}
             >
               {post.author.displayName}

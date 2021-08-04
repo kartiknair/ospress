@@ -8,7 +8,6 @@ import { htmlToText } from 'html-to-text'
 import { getUserByName } from '../../lib/db'
 import { truncate } from '../../lib/utils'
 import FIREBASE_CONIFG from '../../lib/firebase-config'
-import theme from '../../lib/theme'
 
 import Container from '../../components/container'
 
@@ -45,7 +44,7 @@ export default function Profile({ user }) {
 
       <p
         css={css`
-          color: ${theme.colors.grey[4]};
+          color: var(--grey-4);
           font-size: 1.125rem;
           font-family: 'Newsreader', serif;
           line-height: 1.5em;
@@ -76,7 +75,7 @@ export default function Profile({ user }) {
               css={css`
                 margin: 0.75rem 0;
                 font-size: 0.9rem;
-                color: ${theme.colors.grey[3]};
+                color: var(--grey-3);
                 margin: 0 auto auto 0;
 
                 @media (max-width: 626px) {
@@ -102,7 +101,7 @@ export default function Profile({ user }) {
                 <p
                   css={css`
                     max-width: 25rem;
-                    color: ${theme.colors.grey[4]};
+                    color: var(--grey-4);
                     font-family: 'Newsreader', serif;
                     line-height: 1.5em;
                   `}

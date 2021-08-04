@@ -12,7 +12,6 @@ import Spinner from '../../components/spinner'
 import Container from '../../components/container'
 import ProfileSettingsModal from '../../components/profile-settings-modal'
 
-import theme from '../../lib/theme'
 import { truncate } from '../../lib/utils'
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 import { getPostByID, getUserByID } from '../../lib/db'
@@ -68,7 +67,7 @@ function List({ uid }) {
                   css={css`
                     display: flex;
                     align-items: center;
-                    color: ${theme.colors.grey[3]};
+                    color: var(--grey-3);
                     font-size: 0.9rem;
                   `}
                 >
@@ -87,7 +86,7 @@ function List({ uid }) {
                 <p
                   css={css`
                     max-width: 25rem;
-                    color: ${theme.colors.grey[4]};
+                    color: var(--grey-4);
                     font-family: 'Newsreader', serif;
                     line-height: 1.5em;
                     margin-top: 0.5rem;

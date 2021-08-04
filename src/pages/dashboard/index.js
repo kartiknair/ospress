@@ -7,7 +7,6 @@ import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 
-import theme from '../../lib/theme'
 import { createPostForUser } from '../../lib/db'
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 
@@ -117,7 +116,7 @@ export default function Dashboard() {
                   css={css`
                     width: 7rem;
                     font-size: 0.9rem;
-                    color: ${theme.colors.grey[3]};
+                    color: var(--grey-3);
                   `}
                 >
                   <time>{formatDate(post.lastEdited.toDate())}</time>
@@ -127,15 +126,16 @@ export default function Dashboard() {
                     style={{
                       textDecoration: 'none',
                       color: 'inherit',
-                      borderBottom: `1px dotted ${theme.colors.grey[2]}`,
+                      borderBottom: `1px dotted var(--grey-2)`,
                     }}
                   >
                     {!post.published && (
                       <span
                         css={css`
                           display: inline-block;
-                          background: ${theme.colors.grey[2]}40;
-                          color: ${theme.colors.grey[3]};
+                          background: var(--grey-2);
+                          color: var(--grey-4);
+                          opacity: 0.7;
                           padding: 0.25rem;
                           border-radius: 0.25rem;
                           font-size: 0.9rem;
@@ -143,7 +143,8 @@ export default function Dashboard() {
                       >
                         DRAFT
                       </span>
-                    )}{' '}
+                    )}
+                    {'  '}
                     {post.title || 'Untitled'}
                   </a>
                 </Link>
