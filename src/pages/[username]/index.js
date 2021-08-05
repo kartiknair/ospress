@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import Link from 'next/link'
 import Head from 'next/head'
-import Image from 'next/image'
 import firebase from 'firebase'
 import { css } from '@emotion/react'
 import { htmlToText } from 'html-to-text'
@@ -10,6 +9,7 @@ import { truncate } from '../../lib/utils'
 import { getUserByName } from '../../lib/db'
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 
+import meta from '../../components/meta'
 import Container from '../../components/container'
 
 if (firebase.apps.length === 0) {
@@ -20,6 +20,12 @@ export default function Profile({ user }) {
   return (
     <Container maxWidth="640px">
       <Head>
+        {meta({
+          title: `${user.displayName} (@${user.name}) / OSPress`,
+          description: user.about,
+          url: `/${user.name}`,
+          image: user.photo,
+        })}
         <link
           href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&display=swap"
           rel="stylesheet"

@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import Link from 'next/link'
 import Head from 'next/head'
-import Image from 'next/image'
 import firebase from 'firebase'
 import { css } from '@emotion/react'
 import sanitize from 'sanitize-html'
@@ -12,6 +11,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 import { getPostByUsernameAndSlug, getUserByID } from '../../lib/db'
 
+import meta from '../../components/meta'
 import Container from '../../components/container'
 import { IconButton } from '../../components/button'
 import PostContainer from '../../components/post-container'
@@ -101,6 +101,12 @@ export default function Post({ post }) {
   return (
     <Container maxWidth="640px">
       <Head>
+        {meta({
+          title: post.title,
+          description: post.excerpt,
+          url: `/${post.author.name}/${post.slug}`,
+          type: 'article',
+        })}
         <link
           href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&display=swap"
           rel="stylesheet"

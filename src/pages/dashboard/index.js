@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import Link from 'next/link'
+import Head from 'next/head'
 import firebase from 'firebase'
 import { useEffect } from 'react'
 import { css } from '@emotion/react'
@@ -165,6 +166,9 @@ Dashboard.getLayout = function DashboardLayout(page) {
         margin-top: 5rem;
       `}
     >
+      <Head>
+        <title>Dashboard / OSPress</title>
+      </Head>
       {page}
     </Container>
   )

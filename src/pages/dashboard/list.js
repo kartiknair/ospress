@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import Link from 'next/link'
 import Head from 'next/head'
-import Image from 'next/image'
 import firebase from 'firebase'
 import { css } from '@emotion/react'
 import { htmlToText } from 'html-to-text'
@@ -133,15 +132,7 @@ export default function ReadingList() {
           <pre>{JSON.stringify(error)}</pre>
         </>
       ) : (
-        <>
-          <Head>
-            <link
-              href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&display=swap"
-              rel="stylesheet"
-            />
-          </Head>
-          <List uid={user.uid} />
-        </>
+        <List uid={user.uid} />
       )}
     </>
   )
@@ -155,6 +146,13 @@ ReadingList.getLayout = function ReadingListLayout(page) {
         margin-top: 5rem;
       `}
     >
+      <Head>
+        <title>Reading List / OSPress</title>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
       {page}
     </Container>
   )

@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import Head from 'next/head'
 import firebase from 'firebase'
 import { css } from '@emotion/react'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -6,6 +7,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import FIREBASE_CONIFG from '../lib/firebase-config'
 import { setUser, userWithIDExists } from '../lib/db'
 
+import meta from '../components/meta'
 import Spinner from '../components/spinner'
 import Container from '../components/container'
 import Button, { LinkButton } from '../components/button'
@@ -19,15 +21,15 @@ export default function Home() {
 
   if (error) {
     return (
-      <Container maxWidth="420px">
+      <>
         <p>Oop, we&apos;ve had an error:</p>
         <pre>{JSON.stringify(error)}</pre>
-      </Container>
+      </>
     )
   }
 
   return (
-    <Container maxWidth="420px">
+    <>
       <h1
         css={css`
           font-size: 1.5rem;
@@ -84,6 +86,22 @@ export default function Home() {
           Sign in with Google
         </Button>
       )}
+    </>
+  )
+}
+
+Home.getLayout = function HomeLayout(page) {
+  return (
+    <Container maxWidth="420px">
+      <Head>
+        {meta({
+          title: 'OSPress',
+          description:
+            'An ultra minimal blogging platform for anybody who writes',
+          url: '/',
+        })}
+      </Head>
+      {page}
     </Container>
   )
 }

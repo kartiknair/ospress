@@ -135,8 +135,13 @@ function Editor({ post }) {
   })
 
   return (
-    <Container maxWidth="640px">
+    <>
       <Head>
+        <title>
+          {clientPost.title
+            ? `Editing post: ${clientPost.title} / OSPress`
+            : 'Editing...'}
+        </title>
         <link
           href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&display=swap"
           rel="stylesheet"
@@ -368,7 +373,7 @@ function Editor({ post }) {
       >
         <EditorContent editor={contentEditor} />
       </PostContainer>
-    </Container>
+    </>
   )
 }
 
@@ -394,19 +399,28 @@ export default function PostEditor() {
 
   if (userError || postError) {
     return (
-      <Container maxWidth="560px">
+      <>
         <p>Oop, we&apos;ve had an error:</p>
         <pre>{JSON.stringify(userError)}</pre>
         <pre>{JSON.stringify(postError)}</pre>
-      </Container>
+      </>
     )
   } else if (post) {
     return <Editor post={post} />
   }
 
+  return <Spinner />
+}
+
+PostEditor.getLayout = function PostEditorLayout(page) {
   return (
-    <Container maxWidth="560px">
-      <Spinner />
+    <Container
+      maxWidth="640px"
+      css={css`
+        margin-top: 5rem;
+      `}
+    >
+      {page}
     </Container>
   )
 }
