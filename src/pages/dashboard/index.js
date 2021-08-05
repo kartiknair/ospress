@@ -48,7 +48,7 @@ export default function Dashboard() {
       router.push('/')
       return
     }
-  }, [user, userLoading, userError])
+  }, [router, user, userLoading, userError])
 
   return (
     <>
@@ -64,7 +64,7 @@ export default function Dashboard() {
         <Spinner />
       ) : userError || postsError ? (
         <>
-          <p>Oop, we've had an error:</p>
+          <p>Oop, we&apos;ve had an error:</p>
           <pre>{JSON.stringify(error)}</pre>
         </>
       ) : (
@@ -157,13 +157,15 @@ export default function Dashboard() {
   )
 }
 
-Dashboard.getLayout = page => (
-  <Container
-    maxWidth="640px"
-    css={css`
-      margin-top: 5rem;
-    `}
-  >
-    {page}
-  </Container>
-)
+Dashboard.getLayout = function DashboardLayout(page) {
+  return (
+    <Container
+      maxWidth="640px"
+      css={css`
+        margin-top: 5rem;
+      `}
+    >
+      {page}
+    </Container>
+  )
+}

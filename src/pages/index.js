@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import firebase from 'firebase'
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { css } from '@emotion/react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
-import { setUser, userWithIDExists } from '../lib/db'
 import FIREBASE_CONIFG from '../lib/firebase-config'
-import Button, { LinkButton } from '../components/button'
+import { setUser, userWithIDExists } from '../lib/db'
+
 import Spinner from '../components/spinner'
 import Container from '../components/container'
+import Button, { LinkButton } from '../components/button'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -19,7 +20,7 @@ export default function Home() {
   if (error) {
     return (
       <Container maxWidth="420px">
-        <p>Oop, we've had an error:</p>
+        <p>Oop, we&apos;ve had an error:</p>
         <pre>{JSON.stringify(error)}</pre>
       </Container>
     )

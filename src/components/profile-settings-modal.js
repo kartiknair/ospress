@@ -10,8 +10,8 @@ import FIREBASE_CONIFG from '../lib/firebase-config'
 import Button from '../components/button'
 import Spinner from '../components/spinner'
 import { IconButton } from '../components/button'
-import ModalOverlay from '../components/modal-overlay'
 import Input, { Textarea } from '../components/input'
+import ModalOverlay from '../components/modal-overlay'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -44,7 +44,7 @@ function Editor({ user }) {
 
   useEffect(() => {
     setClientUser(user)
-  }, [])
+  }, [user])
 
   return (
     <>
@@ -186,7 +186,7 @@ function ProfileEditor({ uid }) {
   if (userError) {
     return (
       <>
-        <p>Oop, we've had an error:</p>
+        <p>Oop, we&apos;ve had an error:</p>
         <pre>{JSON.stringify(userError)}</pre>
       </>
     )
@@ -226,7 +226,7 @@ export default function ProfileSettingsModal(props) {
             font-size: 0.9rem;
           `}
         >
-          Change your profile details and make sure to hit save when you're
+          Change your profile details and make sure to hit save when you&apos;re
           done.
         </Dialog.Description>
 

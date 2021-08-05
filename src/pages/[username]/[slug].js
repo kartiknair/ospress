@@ -1,18 +1,19 @@
 /** @jsxImportSource @emotion/react */
+import Link from 'next/link'
+import Head from 'next/head'
+import Image from 'next/image'
 import firebase from 'firebase'
 import { css } from '@emotion/react'
 import sanitize from 'sanitize-html'
-import Link from 'next/link'
-import Head from 'next/head'
 
 import { useState, useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
-import { getPostByUsernameAndSlug, getUserByID } from '../../lib/db'
 import FIREBASE_CONIFG from '../../lib/firebase-config'
+import { getPostByUsernameAndSlug, getUserByID } from '../../lib/db'
 
-import { IconButton } from '../../components/button'
 import Container from '../../components/container'
+import { IconButton } from '../../components/button'
 import PostContainer from '../../components/post-container'
 
 if (firebase.apps.length === 0) {
@@ -28,11 +29,11 @@ function AddToReadingListButton({ uid, pid }) {
       const data = await getUserByID(uid)
       setUser(data)
     })()
-  }, [])
+  }, [uid])
 
   useEffect(() => {
     setInList(user.readingList.includes(pid))
-  }, [user])
+  }, [pid, user])
 
   return (
     <IconButton
@@ -101,11 +102,11 @@ export default function Post({ post }) {
     <Container maxWidth="640px">
       <Head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600"
+          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&display=swap"
           rel="stylesheet"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono"
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"
           rel="stylesheet"
         />
       </Head>

@@ -1,22 +1,21 @@
 /** @jsxImportSource @emotion/react */
-import firebase from 'firebase'
-import { useEffect, useState } from 'react'
 import Head from 'next/head'
+import firebase from 'firebase'
+import tinykeys from 'tinykeys'
+import { css } from '@emotion/react'
+import { useEffect, useState } from 'react'
+import StarterKit from '@tiptap/starter-kit'
 import router, { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { useDocumentData } from 'react-firebase-hooks/firestore'
-import { css } from '@emotion/react'
 import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
+import { useDocumentData } from 'react-firebase-hooks/firestore'
 
+import Text from '@tiptap/extension-text'
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
-import Text from '@tiptap/extension-text'
 import Placeholder from '@tiptap/extension-placeholder'
 
 import * as Dialog from '@radix-ui/react-dialog'
-
-import tinykeys from 'tinykeys'
 
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 import { postWithUserIDAndSlugExists, removePostForUser } from '../../lib/db'
@@ -45,7 +44,7 @@ function Editor({ post }) {
 
   useEffect(() => {
     setClientPost(post)
-  }, [])
+  }, [post])
 
   async function saveChanges() {
     if (clientPost.slug !== post.slug) {
@@ -139,11 +138,11 @@ function Editor({ post }) {
     <Container maxWidth="640px">
       <Head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600"
+          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&display=swap"
           rel="stylesheet"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono"
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"
           rel="stylesheet"
         />
       </Head>
@@ -219,7 +218,7 @@ function Editor({ post }) {
                 font-size: 0.9rem;
               `}
             >
-              Make changes to your post's metadata, changes are saved
+              Make changes to your post&apos;s metadata, changes are saved
               automatically.
             </Dialog.Description>
             <div
@@ -391,12 +390,12 @@ export default function PostEditor() {
       router.push('/')
       return
     }
-  }, [user, userLoading, userError, post, postLoading, postError])
+  }, [router, user, userLoading, userError, post, postLoading, postError])
 
   if (userError || postError) {
     return (
       <Container maxWidth="560px">
-        <p>Oop, we've had an error:</p>
+        <p>Oop, we&apos;ve had an error:</p>
         <pre>{JSON.stringify(userError)}</pre>
         <pre>{JSON.stringify(postError)}</pre>
       </Container>

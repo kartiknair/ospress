@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import firebase from 'firebase'
 import Link from 'next/link'
 import Head from 'next/head'
+import Image from 'next/image'
+import firebase from 'firebase'
 import { css } from '@emotion/react'
 import { htmlToText } from 'html-to-text'
 
-import { getUserByName } from '../../lib/db'
 import { truncate } from '../../lib/utils'
+import { getUserByName } from '../../lib/db'
 import FIREBASE_CONIFG from '../../lib/firebase-config'
 
 import Container from '../../components/container'
@@ -20,13 +21,14 @@ export default function Profile({ user }) {
     <Container maxWidth="640px">
       <Head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600"
+          href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&display=swap"
           rel="stylesheet"
         />
       </Head>
 
       <img
         src={user.photo}
+        alt="Profile picture"
         css={css`
           width: 5rem;
           border-radius: 2.5rem;

@@ -1,6 +1,6 @@
 import { getUserByName } from '../../../lib/db'
 
-export default async function (req, res) {
+export default async function getUser(req, res) {
   const { username } = req.query
 
   if (!username || Array.isArray(username)) {
