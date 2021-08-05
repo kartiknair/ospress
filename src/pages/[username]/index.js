@@ -126,10 +126,8 @@ export default function Profile({ user }) {
 }
 
 export async function getStaticPaths() {
-  const snapshot = await firebase.firestore().collection('users').get()
-  const users = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
   return {
-    paths: users.map(u => ({ params: { username: u.name } })),
+    paths: [],
     fallback: 'blocking',
   }
 }

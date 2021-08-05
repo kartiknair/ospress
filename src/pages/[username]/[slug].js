@@ -178,14 +178,8 @@ export default function Post({ post }) {
 }
 
 export async function getStaticPaths() {
-  const snapshot = await firebase.firestore().collection('posts').get()
-  let posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-  posts = posts.filter(p => p.published)
-
   return {
-    paths: posts.map(post => ({
-      params: { username: post.author, slug: post.slug },
-    })),
+    paths: [],
     fallback: 'blocking',
   }
 }
