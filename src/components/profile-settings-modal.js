@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 
+import { userWithNameExists } from '../lib/db'
 import FIREBASE_CONIFG from '../lib/firebase-config'
 
 import Button from '../components/button'
