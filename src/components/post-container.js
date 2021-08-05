@@ -4,7 +4,6 @@ import { css } from '@emotion/react'
 const PostContainer = props => (
   <div
     css={css`
-      color: var(--grey-4);
       margin-top: 2rem;
       font-size: 1.125rem;
       line-height: 1.5em;

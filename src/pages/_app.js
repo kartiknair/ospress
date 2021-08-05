@@ -41,6 +41,7 @@ const App = ({ Component, pageProps }) => {
 
           html {
             font-size: 100%;
+            color: var(--grey-4);
           }
 
           body {
@@ -54,6 +55,7 @@ const App = ({ Component, pageProps }) => {
           h4,
           h5,
           h6 {
+            color: var(--grey-5);
             font-weight: 500;
           }
 
