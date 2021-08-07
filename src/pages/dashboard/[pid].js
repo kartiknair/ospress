@@ -326,8 +326,7 @@ function Editor({ post }) {
           disabled={
             post.title === clientPost.title &&
             post.content === clientPost.content &&
-            post.excerpt === clientPost.excerpt &&
-            !slugErr
+            post.excerpt === clientPost.excerpt
           }
           onClick={saveChanges}
         >
@@ -401,15 +400,17 @@ function Editor({ post }) {
                       <p
                         css={css`
                           margin-top: 1rem;
+                          font-size: 0.9rem;
                         `}
                       >
-                        Invalid slug. That slug is already in use.
+                        Invalid slug. That slug is already in use or contains
+                        special characters.
                       </p>
                     )}
                   </div>
                   <IconButton
                     type="submit"
-                    disabled={clientPost.slug === post.slug}
+                    disabled={clientPost.slug === post.slug || !clientPost.slug}
                     onClick={async e => {
                       e.preventDefault()
 
@@ -417,7 +418,11 @@ function Editor({ post }) {
                         post.author,
                         clientPost.slug,
                       )
-                      if (slugClashing) {
+
+                      if (
+                        slugClashing ||
+                        !clientPost.slug.match(/^[a-z0-9-]+$/i)
+                      ) {
                         setSlugErr(true)
                         return
                       }
