@@ -8,8 +8,14 @@ export default function meta({ title, description, url, image, type }) {
     process.env.NODE_ENV === 'production'
       ? 'https://ospress.co'
       : 'https://' + process.env.VERCEL_URL
-  url = url.startsWith('/') ? baseUrl + url : url
-  image = image.startsWith('/') ? baseUrl + image : image
+
+  if (url) {
+    url = url.startsWith('/') ? baseUrl + url : url
+  }
+
+  if (image) {
+    image = image.startsWith('/') ? baseUrl + image : image
+  }
 
   return (
     <>
