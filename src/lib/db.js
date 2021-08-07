@@ -80,10 +80,8 @@ export async function postWithUsernameAndSlugExists(username, slug) {
 }
 
 export async function postWithUserIDAndSlugExists(uid, slug) {
-  const userDoc = await firebase.firestore().collection('users').doc(uid).get()
-  const user = userDoc.data()
-  const post = user.posts.find(p => p === slug)
-  return !!post
+  const user = await getUserByID(uid)
+  return user.posts.find(post => post.slug === slug)
 }
 
 export async function getPostByUsernameAndSlug(username, slug) {

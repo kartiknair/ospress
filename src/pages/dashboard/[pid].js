@@ -56,7 +56,6 @@ function SelectionMenu({ editor }) {
         align-items: center;
 
         border-radius: 0.5rem;
-        gap: 1rem;
         box-shadow: 0 1rem 1rem var(--grey-1);
         background: var(--grey-5);
         color: var(--grey-1);
@@ -83,6 +82,7 @@ function SelectionMenu({ editor }) {
         }
 
         button {
+          margin: 0 0.5rem;
           background: none;
           border: none;
           width: 1rem;
@@ -199,24 +199,12 @@ function Editor({ post }) {
   }, [post])
 
   async function saveChanges() {
-    if (clientPost.slug !== post.slug) {
-      let slugClashing = await postWithUserIDAndSlugExists(
-        post.author,
-        clientPost.slug,
-      )
-      if (slugClashing) {
-        setSlugErr(true)
-        return
-      }
-    }
-
     let toSave = {
       ...clientPost,
       lastEdited: firebase.firestore.Timestamp.now(),
     }
     delete toSave.id // since we get the id from the document not the data
     await firebase.firestore().collection('posts').doc(post.id).set(toSave)
-    setSlugErr(false)
   }
 
   useEffect(() => {
@@ -337,7 +325,6 @@ function Editor({ post }) {
           type="outline"
           disabled={
             post.title === clientPost.title &&
-            post.slug === clientPost.slug &&
             post.content === clientPost.content &&
             post.excerpt === clientPost.excerpt &&
             !slugErr
@@ -374,36 +361,82 @@ function Editor({ post }) {
                 font-size: 0.9rem;
               `}
             >
-              Make changes to your post&apos;s metadata, changes are saved
-              automatically.
+              Make changes to your post&apos;s metadata.
             </Dialog.Description>
             <div
               css={css`
                 margin: 1.5rem 0;
               `}
             >
-              <label
-                htmlFor="post-slug"
-                css={css`
-                  display: block;
-                  margin-bottom: 0.5rem;
-                `}
-              >
-                Slug
-              </label>
-              <Input
-                type="text"
-                id="post-slug"
-                value={clientPost.slug}
-                onChange={e => {
-                  setSlugErr(false)
-                  setClientPost(prevPost => ({
-                    ...prevPost,
-                    slug: e.target.value,
-                  }))
-                }}
-              />
-              {slugErr && <p>Invalid slug. That slug is already in use.</p>}
+              <form>
+                <label
+                  htmlFor="post-slug"
+                  css={css`
+                    display: block;
+                    margin-bottom: 0.5rem;
+                  `}
+                >
+                  Slug
+                </label>
+                <div
+                  css={css`
+                    display: flex;
+                    align-items: center;
+                  `}
+                >
+                  <div>
+                    <Input
+                      type="text"
+                      id="post-slug"
+                      value={clientPost.slug}
+                      onChange={e => {
+                        setSlugErr(false)
+                        setClientPost(prevPost => ({
+                          ...prevPost,
+                          slug: e.target.value,
+                        }))
+                      }}
+                    />
+                    {slugErr && (
+                      <p
+                        css={css`
+                          margin-top: 1rem;
+                        `}
+                      >
+                        Invalid slug. That slug is already in use.
+                      </p>
+                    )}
+                  </div>
+                  <IconButton
+                    type="submit"
+                    disabled={clientPost.slug === post.slug}
+                    onClick={async e => {
+                      e.preventDefault()
+
+                      let slugClashing = await postWithUserIDAndSlugExists(
+                        post.author,
+                        clientPost.slug,
+                      )
+                      if (slugClashing) {
+                        setSlugErr(true)
+                        return
+                      }
+
+                      let postCopy = { ...post }
+                      delete postCopy.id
+                      postCopy.slug = clientPost.slug
+                      await firebase
+                        .firestore()
+                        .collection('posts')
+                        .doc(post.id)
+                        .update(postCopy)
+                      setSlugErr(false)
+                    }}
+                  >
+                    <CheckIcon />
+                  </IconButton>
+                </div>
+              </form>
             </div>
 
             <div

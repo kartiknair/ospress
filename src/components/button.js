@@ -119,6 +119,12 @@ export function IconButton(props) {
           background: var(--grey-2);
           opacity: 0.4;
         }
+
+        &:disabled {
+          background: none;
+          cursor: not-allowed;
+          opacity: 0.4;
+        }
       `}
       {...props}
     >
