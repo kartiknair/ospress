@@ -73,6 +73,7 @@ export default function Profile({ user }) {
             key={post.id}
             css={css`
               display: flex;
+              margin: 2rem 0;
 
               @media (max-width: 626px) {
                 flex-direction: column;
@@ -141,6 +142,9 @@ export async function getStaticProps({ params }) {
       ...p,
       lastEdited: p.lastEdited.toDate().getTime(),
     }))
+    user.posts.sort((a, b) => {
+      return b.lastEdited - a.lastEdited
+    })
     user.posts = user.posts.filter(p => p.published)
     return {
       props: { user },

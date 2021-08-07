@@ -39,6 +39,7 @@ function AddToReadingListButton({ uid, pid }) {
     <IconButton
       css={css`
         margin-left: auto;
+        margin-bottom: 2.5rem;
       `}
       onClick={async () => {
         const arrayAdd = firebase.firestore.FieldValue.arrayUnion
@@ -162,7 +163,11 @@ export default function Post({ post }) {
       </div>
 
       <PostContainer
-        dangerouslySetInnerHTML={{ __html: sanitize(post.content) }}
+        dangerouslySetInnerHTML={{
+          __html: sanitize(post.content, {
+            allowedTags: sanitize.defaults.allowedTags.concat(['img']),
+          }),
+        }}
         css={css`
           margin-bottom: 5rem;
         `}

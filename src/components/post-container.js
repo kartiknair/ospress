@@ -10,6 +10,12 @@ const PostContainer = props => (
 
       font-family: 'Newsreader', serif;
 
+      img {
+        display: block;
+        max-width: 100%;
+        margin: 0 auto;
+      }
+
       p {
         margin: 1rem 0;
       }
