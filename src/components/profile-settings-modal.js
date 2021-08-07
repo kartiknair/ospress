@@ -3,16 +3,16 @@ import firebase from 'firebase'
 import { css } from '@emotion/react'
 import { useState, useEffect } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
+import { Cross2Icon } from '@radix-ui/react-icons'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
 
 import { userWithNameExists } from '../lib/db'
 import FIREBASE_CONIFG from '../lib/firebase-config'
 
-import Button from '../components/button'
-import Spinner from '../components/spinner'
-import { IconButton } from '../components/button'
-import Input, { Textarea } from '../components/input'
-import ModalOverlay from '../components/modal-overlay'
+import Spinner from './spinner'
+import Input, { Textarea } from './input'
+import ModalOverlay from './modal-overlay'
+import Button, { IconButton } from './button'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -241,35 +241,7 @@ export default function ProfileSettingsModal(props) {
             right: 1rem;
           `}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1rem"
-            height="1rem"
-            fill="currentColor"
-            viewBox="0 0 256 256"
-          >
-            <rect width="256" height="256" fill="none"></rect>
-            <line
-              x1="200"
-              y1="56"
-              x2="56"
-              y2="200"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="16"
-            ></line>
-            <line
-              x1="200"
-              y1="200"
-              x2="56"
-              y2="56"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="16"
-            ></line>
-          </svg>
+          <Cross2Icon />
         </Dialog.Close>
       </Dialog.Content>
     </Dialog.Root>

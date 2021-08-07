@@ -78,6 +78,15 @@ const App = ({ Component, pageProps }) => {
             pointer-events: none;
             height: 0;
           }
+
+          .ProseMirror img {
+            max-width: 100%;
+            height: auto;
+          }
+
+          .ProseMirror img.ProseMirror-selectednode {
+            box-shadow: 0 0 1rem var(--grey-2);
+          }
         `}
       />
       <IdProvider>

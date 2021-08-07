@@ -7,10 +7,23 @@ import { useEffect, useState } from 'react'
 import StarterKit from '@tiptap/starter-kit'
 import router, { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { useEditor, EditorContent } from '@tiptap/react'
 import { useDocumentData } from 'react-firebase-hooks/firestore'
+import {
+  ArrowLeftIcon,
+  CheckIcon,
+  Cross2Icon,
+  DotsVerticalIcon,
+  FontBoldIcon,
+  FontItalicIcon,
+  Link2Icon,
+  LinkBreak2Icon,
+  StrikethroughIcon,
+} from '@radix-ui/react-icons'
+import { useEditor, EditorContent, BubbleMenu } from '@tiptap/react'
 
 import Text from '@tiptap/extension-text'
+import Link from '@tiptap/extension-link'
+import Image from '@tiptap/extension-image'
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -29,6 +42,145 @@ import Button, { IconButton } from '../../components/button'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
+}
+
+function SelectionMenu({ editor }) {
+  const [editingLink, setEditingLink] = useState(false)
+  const [url, setUrl] = useState('')
+
+  return (
+    <BubbleMenu
+      editor={editor}
+      css={css`
+        display: flex;
+        align-items: center;
+
+        border-radius: 0.5rem;
+        gap: 1rem;
+        box-shadow: 0 1rem 1rem var(--grey-1);
+        background: var(--grey-5);
+        color: var(--grey-1);
+        padding: 0.5rem;
+
+        input {
+          background: none;
+          border: none;
+          margin: 0;
+          padding: 0.5rem;
+          color: var(--grey-2);
+          font-family: 'Inter', sans-serif;
+          font-size: 0.8rem;
+        }
+
+        input::placeholder {
+          font-family: 'Inter', sans-serif;
+          color: var(--grey-3);
+          font-size: 0.8rem;
+        }
+
+        input:focus {
+          outline: none;
+        }
+
+        button {
+          background: none;
+          border: none;
+          width: 1rem;
+          height: 1rem;
+          color: var(--grey-3);
+        }
+
+        button:focus,
+        button.is-active {
+          color: var(--grey-1);
+        }
+
+        html[data-theme='dark'] {
+          button:hover {
+            background: rgba(255, 255, 255, 0.1);
+          }
+        }
+
+        html[data-theme='dark'] {
+          button:hover {
+            background: rgba(0, 0, 0, 0.1);
+          }
+        }
+      `}
+    >
+      {editingLink ? (
+        <>
+          <button
+            onClick={() => {
+              setEditingLink(false)
+            }}
+          >
+            <ArrowLeftIcon />
+          </button>
+          <form
+            onSubmit={e => {
+              e.preventDefault()
+
+              editor
+                .chain()
+                .focus()
+                .extendMarkRange('link')
+                .setLink({ href: url })
+                .run()
+
+              setEditingLink(false)
+            }}
+          >
+            <input
+              type="url"
+              value={url}
+              placeholder="https://example.com"
+              onChange={e => {
+                setUrl(e.target.value)
+              }}
+            />
+          </form>
+          <button type="submit">
+            <Link2Icon />
+          </button>
+        </>
+      ) : (
+        <>
+          <button
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            className={editor.isActive('bold') ? 'is-active' : ''}
+          >
+            <FontBoldIcon />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            className={editor.isActive('italic') ? 'is-active' : ''}
+          >
+            <FontItalicIcon />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            className={editor.isActive('strike') ? 'is-active' : ''}
+          >
+            <StrikethroughIcon />
+          </button>
+          {editor.isActive('link') ? (
+            <button onClick={() => editor.chain().focus().unsetLink().run()}>
+              <LinkBreak2Icon />
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setEditingLink(true)
+              }}
+            >
+              <Link2Icon />
+            </button>
+          )}
+        </>
+      )}
+    </BubbleMenu>
+  )
 }
 
 function Editor({ post }) {
@@ -127,12 +279,22 @@ function Editor({ post }) {
           levels: [1, 2, 3],
         },
       }),
+      Link,
+      Image,
       Placeholder,
     ],
     onUpdate: ({ editor: newEditor }) => {
       setClientPost(prevPost => ({ ...prevPost, content: newEditor.getHTML() }))
     },
   })
+
+  function addImage() {
+    const url = window.prompt('URL')
+
+    if (url) {
+      contentEditor.chain().focus().setImage({ src: url }).run()
+    }
+  }
 
   return (
     <>
@@ -187,18 +349,7 @@ function Editor({ post }) {
 
         <Dialog.Root>
           <Dialog.Trigger as={IconButton}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1.5rem"
-              height="1.5rem"
-              fill="var(--grey-4)"
-              viewBox="0 0 256 256"
-            >
-              <rect width="256" height="256" fill="none"></rect>
-              <circle cx="128" cy="128" r="12"></circle>
-              <circle cx="128" cy="64" r="12"></circle>
-              <circle cx="128" cy="192" r="12"></circle>
-            </svg>
+            <DotsVerticalIcon />
           </Dialog.Trigger>
 
           <ModalOverlay />
@@ -303,43 +454,28 @@ function Editor({ post }) {
                 right: 1rem;
               `}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1rem"
-                height="1rem"
-                fill="currentColor"
-                viewBox="0 0 256 256"
-              >
-                <rect width="256" height="256" fill="none"></rect>
-                <line
-                  x1="200"
-                  y1="56"
-                  x2="56"
-                  y2="200"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="16"
-                ></line>
-                <line
-                  x1="200"
-                  y1="200"
-                  x2="56"
-                  y2="56"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="16"
-                ></line>
-              </svg>
+              <Cross2Icon />
             </Dialog.Close>
           </Dialog.Content>
         </Dialog.Root>
       </div>
 
+      <Button
+        type="outline"
+        css={css`
+          font-size: 0.9rem;
+          margin-top: 5rem;
+          margin-bottom: 2.5rem;
+        `}
+        onClick={() => {
+          addImage()
+        }}
+      >
+        + Image
+      </Button>
+
       <div
         css={css`
-          margin-top: 5rem;
           font-size: 1.5rem;
           font-weight: 500;
         `}
@@ -349,10 +485,6 @@ function Editor({ post }) {
 
       <div
         css={css`
-          .ProseMirror-focused {
-            outline: none;
-          }
-
           margin: 1.5rem 0;
           font-size: 1.15rem;
           font-weight: 500;
@@ -371,6 +503,7 @@ function Editor({ post }) {
           margin-bottom: 5rem;
         `}
       >
+        {contentEditor && <SelectionMenu editor={contentEditor} />}
         <EditorContent editor={contentEditor} />
       </PostContainer>
     </>
