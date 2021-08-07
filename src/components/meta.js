@@ -4,7 +4,12 @@
 //   <Meta title="cool title" description="cool desc" url="/cool" />
 export default function meta({ title, description, url, image, type }) {
   // We prefix relative urls with the VERCEL_URL that vercel sets for us on deployments
-  url = url.startsWith('/') ? process.env.VERCEL_URL + url : url
+  const baseUrl =
+    process.env.NODE_ENV === 'production'
+      ? 'https://ospress.co'
+      : 'https://' + process.env.VERCEL_URL
+  url = url.startsWith('/') ? baseUrl + url : url
+  image = image.startsWith('/') ? baseUrl + image : image
 
   return (
     <>

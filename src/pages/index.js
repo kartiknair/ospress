@@ -142,6 +142,7 @@ Home.getLayout = function HomeLayout(page) {
           description:
             'An ultra minimal blogging platform for anybody who writes',
           url: '/',
+          image: '/images/socials.png',
         })}
       </Head>
       {page}
