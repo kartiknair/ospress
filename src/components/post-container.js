@@ -16,6 +16,12 @@ const PostContainer = props => (
         margin: 0 auto;
       }
 
+      a {
+        text-decoration: none;
+        color: var(--grey-5);
+        border-bottom: 1px dotted var(--grey-3);
+      }
+
       p {
         margin: 1rem 0;
       }
