@@ -84,74 +84,78 @@ export default function Dashboard() {
             New post
           </Button>
 
-          <ul
-            css={css`
-              margin-top: 3.5rem;
-              list-style: none;
-            `}
-          >
-            {posts.map(post => (
-              <li
-                key={post.id}
-                css={css`
-                  margin: 1.5rem 0;
-                  display: flex;
-                  a {
-                    margin-left: 3rem;
-                  }
-
-                  @media (max-width: 720px) {
-                    display: block;
-                    margin: 2rem 0;
-
-                    a {
-                      margin: 0;
-                    }
-                    p {
-                      margin-bottom: 0.75rem;
-                    }
-                  }
-                `}
-              >
-                <p
+          {posts.length === 0 ? (
+            <p>You have no posts yet.</p>
+          ) : (
+            <ul
+              css={css`
+                margin-top: 3.5rem;
+                list-style: none;
+              `}
+            >
+              {posts.map(post => (
+                <li
+                  key={post.id}
                   css={css`
-                    width: 7rem;
-                    font-size: 0.9rem;
-                    color: var(--grey-3);
+                    margin: 1.5rem 0;
+                    display: flex;
+                    a {
+                      margin-left: 3rem;
+                    }
+
+                    @media (max-width: 720px) {
+                      display: block;
+                      margin: 2rem 0;
+
+                      a {
+                        margin: 0;
+                      }
+                      p {
+                        margin-bottom: 0.75rem;
+                      }
+                    }
                   `}
                 >
-                  <time>{formatDate(post.lastEdited.toDate())}</time>
-                </p>
-                <Link href={`/dashboard/${post.id}`}>
-                  <a
-                    style={{
-                      textDecoration: 'none',
-                      color: 'inherit',
-                      borderBottom: `1px dotted var(--grey-2)`,
-                    }}
+                  <p
+                    css={css`
+                      width: 7rem;
+                      font-size: 0.9rem;
+                      color: var(--grey-3);
+                    `}
                   >
-                    {!post.published && (
-                      <span
-                        css={css`
-                          display: inline-block;
-                          background: var(--grey-2);
-                          color: var(--grey-4);
-                          opacity: 0.7;
-                          padding: 0.25rem;
-                          border-radius: 0.25rem;
-                          font-size: 0.9rem;
-                        `}
-                      >
-                        DRAFT
-                      </span>
-                    )}
-                    {'  '}
-                    {post.title || 'Untitled'}
-                  </a>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                    <time>{formatDate(post.lastEdited.toDate())}</time>
+                  </p>
+                  <Link href={`/dashboard/${post.id}`}>
+                    <a
+                      style={{
+                        textDecoration: 'none',
+                        color: 'inherit',
+                        borderBottom: `1px dotted var(--grey-2)`,
+                      }}
+                    >
+                      {!post.published && (
+                        <span
+                          css={css`
+                            display: inline-block;
+                            background: var(--grey-2);
+                            color: var(--grey-4);
+                            opacity: 0.7;
+                            padding: 0.25rem;
+                            border-radius: 0.25rem;
+                            font-size: 0.9rem;
+                          `}
+                        >
+                          DRAFT
+                        </span>
+                      )}
+                      {'  '}
+                      {post.title || 'Untitled'}
+                    </a>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </>
       )}
     </>
