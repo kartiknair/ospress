@@ -52,7 +52,7 @@ const outlineButtonStyles = css`
 `
 
 export default function Button(props) {
-  if (props.type === 'outline') {
+  if (props.outline) {
     return (
       <button css={outlineButtonStyles} {...props}>
         {props.children}
@@ -67,7 +67,7 @@ export default function Button(props) {
 }
 
 export function LinkButton(props) {
-  if (props.type === 'outline') {
+  if (props.outline) {
     return (
       <Link {...props}>
         <a
@@ -95,40 +95,59 @@ export function LinkButton(props) {
   )
 }
 
+const iconButtonStyles = css`
+  background: none;
+  border: none;
+  border-radius: 1rem;
+
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+
+  cursor: pointer;
+  transition: all 200ms ease;
+
+  &:hover {
+    background: var(--grey-2);
+    opacity: 0.4;
+  }
+
+  &:disabled {
+    background: none;
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+`
+
 export function IconButton(props) {
   return (
     <button
       css={css`
-        background: none;
-        border: none;
-        border-radius: 1rem;
-
-        width: 2rem;
-        height: 2rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        font-family: 'Inter', sans-serif;
-        font-size: 1.25rem;
-
-        cursor: pointer;
-        transition: all 200ms ease;
-
-        &:hover {
-          background: var(--grey-2);
-          opacity: 0.4;
-        }
-
-        &:disabled {
-          background: none;
-          cursor: not-allowed;
-          opacity: 0.4;
-        }
+        ${iconButtonStyles}
       `}
       {...props}
     >
       {props.children}
     </button>
+  )
+}
+
+export function LinkIconButton(props) {
+  return (
+    <Link {...props}>
+      <a
+        css={css`
+          ${iconButtonStyles}
+        `}
+        {...props}
+      >
+        {props.children}
+      </a>
+    </Link>
   )
 }

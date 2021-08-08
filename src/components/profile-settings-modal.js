@@ -155,7 +155,7 @@ function Editor({ user }) {
           margin-left: auto;
           font-size: 0.9rem;
         `}
-        type="outline"
+        outline
         disabled={
           user.name === clientUser.name &&
           user.displayName === clientUser.displayName &&

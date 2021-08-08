@@ -31,18 +31,14 @@ import Placeholder from '@tiptap/extension-placeholder'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import FIREBASE_CONIFG from '../../lib/firebase-config'
-import {
-  postWithUserIDAndSlugExists,
-  removePostForUser,
-  getUserByID,
-} from '../../lib/db'
+import { postWithUserIDAndSlugExists, removePostForUser } from '../../lib/db'
 
 import Input from '../../components/input'
 import Spinner from '../../components/spinner'
 import Container from '../../components/container'
 import ModalOverlay from '../../components/modal-overlay'
 import PostContainer from '../../components/post-container'
-import Button, { IconButton } from '../../components/button'
+import Button, { IconButton, LinkIconButton } from '../../components/button'
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(FIREBASE_CONIFG)
@@ -188,7 +184,7 @@ function SelectionMenu({ editor }) {
 }
 
 function Editor({ post }) {
-  const [userdata, userdataLoading, userdataError] = useDocumentData(
+  const [userdata] = useDocumentData(
     firebase.firestore().doc(`users/${post.author}`),
     {
       idField: 'id',
@@ -312,7 +308,7 @@ function Editor({ post }) {
         />
       </Head>
 
-      <div
+      <header
         css={css`
           display: flex;
           align-items: center;
@@ -326,13 +322,16 @@ function Editor({ post }) {
           }
         `}
       >
+        <LinkIconButton href="/dashboard">
+          <ArrowLeftIcon />
+        </LinkIconButton>
         <Button
           css={css`
             margin-left: auto;
             margin-right: 1rem;
             font-size: 0.9rem;
           `}
-          type="outline"
+          outline
           disabled={
             post.title === clientPost.title &&
             post.content === clientPost.content &&
@@ -484,7 +483,7 @@ function Editor({ post }) {
                 {post.published ? 'Make Draft' : 'Publish'}
               </Button>
               <Button
-                type="outline"
+                outline
                 onClick={async () => {
                   await removePostForUser(post.author, post.id)
                   router.push('/dashboard')
@@ -535,10 +534,10 @@ function Editor({ post }) {
             </Dialog.Close>
           </Dialog.Content>
         </Dialog.Root>
-      </div>
+      </header>
 
       <Button
-        type="outline"
+        outline
         css={css`
           font-size: 0.9rem;
           margin-top: 5rem;

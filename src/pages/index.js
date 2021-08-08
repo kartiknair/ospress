@@ -98,7 +98,7 @@ export default function Home() {
             css={css`
               margin-left: 1rem;
             `}
-            type="outline"
+            outline
             onClick={() => firebase.auth().signOut()}
           >
             Sign Out

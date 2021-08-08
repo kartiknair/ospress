@@ -71,7 +71,7 @@ export default function Dashboard() {
       ) : (
         <>
           <Button
-            type="outline"
+            outline
             css={css`
               font-size: 0.9rem;
               margin-right: auto;
