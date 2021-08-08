@@ -128,6 +128,28 @@ function Editor({ user }) {
         </div>
       </div>
 
+      <p
+        css={css`
+          font-size: 0.9rem;
+          max-width: 20rem;
+          margin-bottom: 1.5rem;
+          margin-top: -1rem;
+          word-wrap: break-word;
+
+          a {
+            text-decoration: none;
+            color: inherit;
+            font-style: italic;
+            border-bottom: 1px dotted var(--grey-3);
+          }
+        `}
+      >
+        See your profile live at:{' '}
+        <a target="_blank" href={`/${user.name}`}>
+          ospress.co/{user.name}
+        </a>
+      </p>
+
       <Button
         css={css`
           margin-left: auto;

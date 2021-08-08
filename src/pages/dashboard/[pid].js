@@ -31,7 +31,11 @@ import Placeholder from '@tiptap/extension-placeholder'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import FIREBASE_CONIFG from '../../lib/firebase-config'
-import { postWithUserIDAndSlugExists, removePostForUser } from '../../lib/db'
+import {
+  postWithUserIDAndSlugExists,
+  removePostForUser,
+  getUserByID,
+} from '../../lib/db'
 
 import Input from '../../components/input'
 import Spinner from '../../components/spinner'
@@ -184,6 +188,12 @@ function SelectionMenu({ editor }) {
 }
 
 function Editor({ post }) {
+  const [userdata, userdataLoading, userdataError] = useDocumentData(
+    firebase.firestore().doc(`users/${post.author}`),
+    {
+      idField: 'id',
+    },
+  )
   const [clientPost, setClientPost] = useState({
     title: '',
     content: '',
@@ -483,6 +493,31 @@ function Editor({ post }) {
                 Delete
               </Button>
             </div>
+
+            {post.published && userdata ? (
+              <p
+                css={css`
+                  margin: 1.5rem 0 0 0;
+                  font-size: 0.9rem;
+                  max-width: 15rem;
+                  word-wrap: break-word;
+
+                  a {
+                    text-decoration: none;
+                    color: inherit;
+                    font-style: italic;
+                    border-bottom: 1px dotted var(--grey-3);
+                  }
+                `}
+              >
+                See your post live at:{' '}
+                <a target="_blank" href={`/${userdata.name}/${post.slug}`}>
+                  ospress.co/{userdata.name}/{post.slug}
+                </a>
+              </p>
+            ) : (
+              ''
+            )}
 
             <Dialog.Close
               as={IconButton}
