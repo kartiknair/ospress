@@ -511,7 +511,11 @@ function Editor({ post }) {
                 `}
               >
                 See your post live at:{' '}
-                <a target="_blank" href={`/${userdata.name}/${post.slug}`}>
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href={`/${userdata.name}/${post.slug}`}
+                >
                   ospress.co/{userdata.name}/{post.slug}
                 </a>
               </p>
