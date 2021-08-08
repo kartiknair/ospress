@@ -63,6 +63,7 @@ const PostContainer = props => (
         font-family: monospace;
         border-radius: 0.5rem;
         padding: 1rem 1.5rem;
+        overflow: auto;
       }
 
       code {

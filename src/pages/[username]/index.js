@@ -148,6 +148,7 @@ export async function getStaticProps({ params }) {
     user.posts = user.posts.filter(p => p.published)
     return {
       props: { user },
+      revalidate: 1,
     }
   } catch (err) {
     console.log(err)

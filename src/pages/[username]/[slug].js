@@ -207,7 +207,8 @@ export async function getStaticProps({ params }) {
     post.author = userDoc.data()
     post.lastEdited = post.lastEdited.toDate().getTime()
     return {
-      props: { post, revalidate: 1 },
+      props: { post },
+      revalidate: 1,
     }
   } catch (err) {
     console.log(err)
