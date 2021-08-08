@@ -105,29 +105,64 @@ export default function Home() {
           </Button>
         </div>
       ) : (
-        <Button
-          onClick={() => {
-            const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
-            firebase
-              .auth()
-              .signInWithPopup(googleAuthProvider)
-              .then(async cred => {
-                let userExists = await userWithIDExists(cred.user.uid)
-                if (!userExists) {
-                  await setUser(cred.user.uid, {
-                    name: cred.user.uid,
-                    displayName: cred.user.displayName || 'Anonymous',
-                    about: 'Nothing to say about you.',
-                    posts: [],
-                    photo: cred.user.photoURL,
-                    readingList: [],
-                  })
-                }
-              })
-          }}
+        <div
+          css={css`
+            display: flex;
+            button:first-of-type {
+              margin-right: 1rem;
+            }
+          `}
         >
-          Sign in with Google
-        </Button>
+          <Button
+            onClick={() => {
+              const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
+              firebase
+                .auth()
+                .signInWithPopup(googleAuthProvider)
+                .then(async cred => {
+                  let userExists = await userWithIDExists(cred.user.uid)
+                  if (!userExists) {
+                    await setUser(cred.user.uid, {
+                      name: cred.user.uid,
+                      displayName: cred.user.displayName || 'Anonymous',
+                      about: 'Nothing to say about you.',
+                      posts: [],
+                      photo: cred.user.photoURL,
+                      readingList: [],
+                    })
+                  }
+                })
+            }}
+          >
+            Google Sign In
+          </Button>
+          <Button
+            onClick={() => {
+              const githubAuthProvider = new firebase.auth.GithubAuthProvider()
+              firebase
+                .auth()
+                .signInWithPopup(githubAuthProvider)
+                .then(async cred => {
+                  let userExists = await userWithIDExists(cred.user.uid)
+
+                  console.log(cred.user)
+
+                  if (!userExists) {
+                    await setUser(cred.user.uid, {
+                      name: cred.user.uid,
+                      displayName: cred.user.displayName || 'Anonymous',
+                      about: 'Nothing to say about you.',
+                      posts: [],
+                      photo: cred.user.photoURL,
+                      readingList: [],
+                    })
+                  }
+                })
+            }}
+          >
+            GitHub Sign In
+          </Button>
+        </div>
       )}
     </div>
   )
