@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import Head from 'next/head'
 import { css } from '@emotion/react'
+import { useRouter } from 'next/router'
 import { htmlToText } from 'html-to-text'
 import { useState, useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -99,9 +100,11 @@ function List({ uid }) {
 }
 
 export default function ReadingList() {
+  const router = useRouter()
   const [user, userLoading, userError] = useAuthState(auth)
 
   useEffect(() => {
+    console.log(user, userLoading, userError)
     if (!user && !userLoading && !userError) {
       router.push('/')
       return
@@ -118,15 +121,15 @@ export default function ReadingList() {
         <button onClick={() => auth.signOut()}>Sign Out</button>
       </Header>
 
-      {userLoading ? (
-        <Spinner />
-      ) : userError ? (
+      {userError ? (
         <>
           <p>Oop, we&apos;ve had an error:</p>
           <pre>{JSON.stringify(error)}</pre>
         </>
-      ) : (
+      ) : user ? (
         <List uid={user.uid} />
+      ) : (
+        <Spinner />
       )}
     </>
   )

@@ -37,6 +37,7 @@ export default function Dashboard() {
   )
 
   useEffect(() => {
+    console.log(user, userLoading, userError)
     if (!user && !userLoading && !userError) {
       router.push('/')
       return
@@ -53,14 +54,12 @@ export default function Dashboard() {
         <button onClick={() => auth.signOut()}>Sign Out</button>
       </Header>
 
-      {userLoading || postsLoading ? (
-        <Spinner />
-      ) : userError || postsError ? (
+      {userError || postsError ? (
         <>
           <p>Oop, we&apos;ve had an error:</p>
           <pre>{JSON.stringify(error)}</pre>
         </>
-      ) : (
+      ) : user && posts ? (
         <>
           <Button
             outline
@@ -161,6 +160,8 @@ export default function Dashboard() {
             </ul>
           )}
         </>
+      ) : (
+        <Spinner />
       )}
     </>
   )
