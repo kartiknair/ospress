@@ -53,8 +53,10 @@ const outlineButtonStyles = css`
 
 export default function Button(props) {
   if (props.outline) {
+    let { outline, ...rest } = props
+
     return (
-      <button css={outlineButtonStyles} {...props}>
+      <button css={outlineButtonStyles} {...rest}>
         {props.children}
       </button>
     )
@@ -68,8 +70,10 @@ export default function Button(props) {
 
 export function LinkButton(props) {
   if (props.outline) {
+    let { outline, ...rest } = props
+
     return (
-      <Link {...props}>
+      <Link {...rest}>
         <a
           css={css`
             ${outlineButtonStyles}
@@ -143,6 +147,7 @@ export function LinkIconButton(props) {
       <a
         css={css`
           ${iconButtonStyles}
+          color: inherit;
         `}
         {...props}
       >
