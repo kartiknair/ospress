@@ -1,24 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import Link from 'next/link'
 import Head from 'next/head'
-import firebase from 'firebase'
 import { css } from '@emotion/react'
 import sanitize from 'sanitize-html'
 
 import { useState, useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
-import FIREBASE_CONIFG from '../../lib/firebase-config'
+import firebase, { firestore, auth } from '../../lib/firebase'
 import { getPostByUsernameAndSlug, getUserByID } from '../../lib/db'
 
 import meta from '../../components/meta'
 import Container from '../../components/container'
 import { IconButton } from '../../components/button'
 import PostContainer from '../../components/post-container'
-
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(FIREBASE_CONIFG)
-}
 
 function AddToReadingListButton({ uid, pid }) {
   const [user, setUser] = useState({ readingList: [] })
@@ -45,8 +40,7 @@ function AddToReadingListButton({ uid, pid }) {
         const arrayAdd = firebase.firestore.FieldValue.arrayUnion
         const arrayRemove = firebase.firestore.FieldValue.arrayRemove
 
-        await firebase
-          .firestore()
+        await firestore
           .collection('users')
           .doc(uid)
           .update({
@@ -99,7 +93,7 @@ function AddToReadingListButton({ uid, pid }) {
 }
 
 export default function Post({ post }) {
-  const [user, _loading, _error] = useAuthState(firebase.auth())
+  const [user, _loading, _error] = useAuthState(auth)
 
   return (
     <Container maxWidth="640px">
@@ -199,11 +193,7 @@ export async function getStaticProps({ params }) {
     if (!post.published) {
       return { notFound: true }
     }
-    const userDoc = await firebase
-      .firestore()
-      .collection('users')
-      .doc(post.author)
-      .get()
+    const userDoc = await firestore.collection('users').doc(post.author).get()
     post.author = userDoc.data()
     post.lastEdited = post.lastEdited.toDate().getTime()
     return {

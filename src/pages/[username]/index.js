@@ -1,20 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import Link from 'next/link'
 import Head from 'next/head'
-import firebase from 'firebase'
 import { css } from '@emotion/react'
 import { htmlToText } from 'html-to-text'
 
 import { truncate } from '../../lib/utils'
 import { getUserByName } from '../../lib/db'
-import FIREBASE_CONIFG from '../../lib/firebase-config'
 
 import meta from '../../components/meta'
 import Container from '../../components/container'
-
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(FIREBASE_CONIFG)
-}
 
 export default function Profile({ user }) {
   return (

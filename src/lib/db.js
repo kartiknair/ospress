@@ -1,18 +1,12 @@
-import firebase from 'firebase'
-import config from './firebase-config'
-
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(config)
-}
+import firebase, { firestore } from './firebase'
 
 export async function userWithIDExists(id) {
-  const doc = await firebase.firestore().collection('users').doc(id).get()
+  const doc = await firestore.collection('users').doc(id).get()
   return doc.exists
 }
 
 export async function userWithNameExists(name) {
-  const query = await firebase
-    .firestore()
+  const query = await firestore
     .collection('users')
     .where('name', '==', name)
     .get()
@@ -21,7 +15,7 @@ export async function userWithNameExists(name) {
 }
 
 export async function getUserByID(id) {
-  const doc = await firebase.firestore().collection('users').doc(id).get()
+  const doc = await firestore.collection('users').doc(id).get()
   if (!doc.exists) {
     throw { code: 'user/not-found' }
   }
@@ -34,8 +28,7 @@ export async function getUserByID(id) {
 }
 
 export async function getUserByName(name) {
-  const query = await firebase
-    .firestore()
+  const query = await firestore
     .collection('users')
     .where('name', '==', name)
     .get()
@@ -52,7 +45,7 @@ export async function getUserByName(name) {
 }
 
 export async function getPostByID(id) {
-  const doc = await firebase.firestore().collection('posts').doc(id).get()
+  const doc = await firestore.collection('posts').doc(id).get()
   if (!doc.exists) {
     throw { code: 'post/not-found' }
   }
@@ -61,16 +54,15 @@ export async function getPostByID(id) {
 }
 
 export async function removePostForUser(uid, pid) {
-  await firebase.firestore().collection('posts').doc(pid).delete()
-  firebase
-    .firestore()
+  await firestore.collection('posts').doc(pid).delete()
+  firestore
     .collection('users')
     .doc(uid)
     .update({ posts: firebase.firestore.FieldValue.arrayRemove(pid) })
 }
 
 export async function postWithIDExists(id) {
-  const doc = await firebase.firestore().collection('posts').doc(id).get()
+  const doc = await firestore.collection('posts').doc(id).get()
   return doc.exists
 }
 
@@ -95,15 +87,15 @@ export async function getPostByUsernameAndSlug(username, slug) {
 }
 
 export async function setUser(id, data) {
-  await firebase.firestore().collection('users').doc(id).set(data)
+  await firestore.collection('users').doc(id).set(data)
 }
 
 export async function setPost(id, data) {
-  await firebase.firestore().collection('posts').doc(id).set(data)
+  await firestore.collection('posts').doc(id).set(data)
 }
 
 export async function createPostForUser(userId) {
-  const doc = await firebase.firestore().collection('posts').add({
+  const doc = await firestore.collection('posts').add({
     title: '',
     excerpt: '',
     content: '',
@@ -112,14 +104,9 @@ export async function createPostForUser(userId) {
     lastEdited: firebase.firestore.Timestamp.now(),
   })
 
-  await firebase
-    .firestore()
-    .collection('posts')
-    .doc(doc.id)
-    .update({ slug: doc.id })
+  await firestore.collection('posts').doc(doc.id).update({ slug: doc.id })
 
-  await firebase
-    .firestore()
+  await firestore
     .collection('users')
     .doc(userId)
     .update({ posts: firebase.firestore.FieldValue.arrayUnion(doc.id) })

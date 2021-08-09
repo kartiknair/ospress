@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import Head from 'next/head'
-import firebase from 'firebase'
 import { css } from '@emotion/react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
-import FIREBASE_CONIFG from '../lib/firebase-config'
+import firebase, { auth } from '../lib/firebase'
 import { setUser, userWithIDExists } from '../lib/db'
 
 import meta from '../components/meta'
@@ -12,12 +11,8 @@ import Spinner from '../components/spinner'
 import Container from '../components/container'
 import Button, { LinkButton } from '../components/button'
 
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(FIREBASE_CONIFG)
-}
-
 export default function Home() {
-  const [user, loading, error] = useAuthState(firebase.auth())
+  const [user, loading, error] = useAuthState(auth)
 
   if (error) {
     return (
@@ -99,7 +94,7 @@ export default function Home() {
               margin-left: 1rem;
             `}
             outline
-            onClick={() => firebase.auth().signOut()}
+            onClick={() => auth.signOut()}
           >
             Sign Out
           </Button>
@@ -116,22 +111,19 @@ export default function Home() {
           <Button
             onClick={() => {
               const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
-              firebase
-                .auth()
-                .signInWithPopup(googleAuthProvider)
-                .then(async cred => {
-                  let userExists = await userWithIDExists(cred.user.uid)
-                  if (!userExists) {
-                    await setUser(cred.user.uid, {
-                      name: cred.user.uid,
-                      displayName: cred.user.displayName || 'Anonymous',
-                      about: 'Nothing to say about you.',
-                      posts: [],
-                      photo: cred.user.photoURL,
-                      readingList: [],
-                    })
-                  }
-                })
+              auth.signInWithPopup(googleAuthProvider).then(async cred => {
+                let userExists = await userWithIDExists(cred.user.uid)
+                if (!userExists) {
+                  await setUser(cred.user.uid, {
+                    name: cred.user.uid,
+                    displayName: cred.user.displayName || 'Anonymous',
+                    about: 'Nothing to say about you.',
+                    posts: [],
+                    photo: cred.user.photoURL,
+                    readingList: [],
+                  })
+                }
+              })
             }}
           >
             Google Sign In
@@ -139,25 +131,22 @@ export default function Home() {
           <Button
             onClick={() => {
               const githubAuthProvider = new firebase.auth.GithubAuthProvider()
-              firebase
-                .auth()
-                .signInWithPopup(githubAuthProvider)
-                .then(async cred => {
-                  let userExists = await userWithIDExists(cred.user.uid)
+              auth.signInWithPopup(githubAuthProvider).then(async cred => {
+                let userExists = await userWithIDExists(cred.user.uid)
 
-                  console.log(cred.user)
+                console.log(cred.user)
 
-                  if (!userExists) {
-                    await setUser(cred.user.uid, {
-                      name: cred.user.uid,
-                      displayName: cred.user.displayName || 'Anonymous',
-                      about: 'Nothing to say about you.',
-                      posts: [],
-                      photo: cred.user.photoURL,
-                      readingList: [],
-                    })
-                  }
-                })
+                if (!userExists) {
+                  await setUser(cred.user.uid, {
+                    name: cred.user.uid,
+                    displayName: cred.user.displayName || 'Anonymous',
+                    about: 'Nothing to say about you.',
+                    posts: [],
+                    photo: cred.user.photoURL,
+                    readingList: [],
+                  })
+                }
+              })
             }}
           >
             GitHub Sign In

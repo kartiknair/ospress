@@ -1,4 +1,4 @@
-export const FIREBASE_CONIFG = {
+export const FIREBASE_CONFIG = {
   apiKey: 'AIzaSyCcUtgsWozqWdcEXlcEP-ZAw9S90OoNNmE',
   authDomain: 'urblog-c04e4.firebaseapp.com',
   projectId: 'urblog-c04e4',
@@ -7,4 +7,4 @@ export const FIREBASE_CONIFG = {
   appId: '1:76262652455:web:d72a5ef2f12854a0036c02',
 }
 
-export default FIREBASE_CONIFG
+export default FIREBASE_CONFIG

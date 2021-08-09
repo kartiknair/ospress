@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import Link from 'next/link'
 import Head from 'next/head'
-import firebase from 'firebase'
 import { useEffect } from 'react'
 import { css } from '@emotion/react'
 import { useRouter } from 'next/router'
@@ -9,17 +8,13 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 
 import { createPostForUser } from '../../lib/db'
-import FIREBASE_CONIFG from '../../lib/firebase-config'
+import { firestore, auth } from '../../lib/firebase'
 
 import Button from '../../components/button'
 import Header from '../../components/header'
 import Spinner from '../../components/spinner'
 import Container from '../../components/container'
 import ProfileSettingsModal from '../../components/profile-settings-modal'
-
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(FIREBASE_CONIFG)
-}
 
 function formatDate(date) {
   const year = date.getFullYear()
@@ -35,12 +30,9 @@ function formatDate(date) {
 export default function Dashboard() {
   const router = useRouter()
 
-  const [user, userLoading, userError] = useAuthState(firebase.auth())
+  const [user, userLoading, userError] = useAuthState(auth)
   const [posts, postsLoading, postsError] = useCollectionData(
-    firebase
-      .firestore()
-      .collection('posts')
-      .where('author', '==', user ? user.uid : ''),
+    firestore.collection('posts').where('author', '==', user ? user.uid : ''),
     { idField: 'id' },
   )
 
@@ -58,7 +50,7 @@ export default function Dashboard() {
           <a>Reading List</a>
         </Link>
         <ProfileSettingsModal Trigger={() => 'Profile'} uid={user?.uid} />
-        <button onClick={() => firebase.auth().signOut()}>Sign Out</button>
+        <button onClick={() => auth.signOut()}>Sign Out</button>
       </Header>
 
       {userLoading || postsLoading ? (

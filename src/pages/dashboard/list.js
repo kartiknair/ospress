@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import Link from 'next/link'
 import Head from 'next/head'
-import firebase from 'firebase'
 import { css } from '@emotion/react'
 import { htmlToText } from 'html-to-text'
 import { useState, useEffect } from 'react'
@@ -13,12 +12,8 @@ import Container from '../../components/container'
 import ProfileSettingsModal from '../../components/profile-settings-modal'
 
 import { truncate } from '../../lib/utils'
-import FIREBASE_CONIFG from '../../lib/firebase-config'
+import { firestore, auth } from '../../lib/firebase'
 import { getPostByID, getUserByID } from '../../lib/db'
-
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(FIREBASE_CONIFG)
-}
 
 function List({ uid }) {
   const [list, setList] = useState([])
@@ -28,8 +23,7 @@ function List({ uid }) {
       const user = await getUserByID(uid)
       const postPromises = user.readingList.map(async pid => {
         const post = await getPostByID(pid)
-        const author = await firebase
-          .firestore()
+        const author = await firestore
           .collection('users')
           .doc(post.author)
           .get()
@@ -105,7 +99,7 @@ function List({ uid }) {
 }
 
 export default function ReadingList() {
-  const [user, userLoading, userError] = useAuthState(firebase.auth())
+  const [user, userLoading, userError] = useAuthState(auth)
 
   useEffect(() => {
     if (!user && !userLoading && !userError) {
@@ -121,7 +115,7 @@ export default function ReadingList() {
           <a>Dashboard</a>
         </Link>
         <ProfileSettingsModal Trigger={() => 'Profile'} uid={user?.uid} />
-        <button onClick={() => firebase.auth().signOut()}>Sign Out</button>
+        <button onClick={() => auth.signOut()}>Sign Out</button>
       </Header>
 
       {userLoading ? (

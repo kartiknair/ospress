@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import Head from 'next/head'
-import firebase from 'firebase'
 import tinykeys from 'tinykeys'
 import { css } from '@emotion/react'
 import { useEffect, useState } from 'react'
@@ -30,7 +29,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 
 import * as Dialog from '@radix-ui/react-dialog'
 
-import FIREBASE_CONIFG from '../../lib/firebase-config'
+import firebase, { auth, firestore } from '../../lib/firebase'
 import { postWithUserIDAndSlugExists, removePostForUser } from '../../lib/db'
 
 import Input from '../../components/input'
@@ -39,10 +38,6 @@ import Container from '../../components/container'
 import ModalOverlay from '../../components/modal-overlay'
 import PostContainer from '../../components/post-container'
 import Button, { IconButton, LinkIconButton } from '../../components/button'
-
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(FIREBASE_CONIFG)
-}
 
 function SelectionMenu({ editor }) {
   const [editingLink, setEditingLink] = useState(false)
@@ -184,12 +179,9 @@ function SelectionMenu({ editor }) {
 }
 
 function Editor({ post }) {
-  const [userdata] = useDocumentData(
-    firebase.firestore().doc(`users/${post.author}`),
-    {
-      idField: 'id',
-    },
-  )
+  const [userdata] = useDocumentData(firestore.doc(`users/${post.author}`), {
+    idField: 'id',
+  })
   const [clientPost, setClientPost] = useState({
     title: '',
     content: '',
@@ -210,7 +202,7 @@ function Editor({ post }) {
       lastEdited: firebase.firestore.Timestamp.now(),
     }
     delete toSave.id // since we get the id from the document not the data
-    await firebase.firestore().collection('posts').doc(post.id).set(toSave)
+    await firestore.collection('posts').doc(post.id).set(toSave)
   }
 
   useEffect(() => {
@@ -439,8 +431,7 @@ function Editor({ post }) {
                       let postCopy = { ...post }
                       delete postCopy.id
                       postCopy.slug = clientPost.slug
-                      await firebase
-                        .firestore()
+                      await firestore
                         .collection('posts')
                         .doc(post.id)
                         .update(postCopy)
@@ -473,8 +464,7 @@ function Editor({ post }) {
             >
               <Button
                 onClick={async () => {
-                  await firebase
-                    .firestore()
+                  await firestore
                     .collection('posts')
                     .doc(post.id)
                     .update({ published: !post.published })
@@ -588,9 +578,9 @@ function Editor({ post }) {
 
 export default function PostEditor() {
   const router = useRouter()
-  const [user, userLoading, userError] = useAuthState(firebase.auth())
+  const [user, userLoading, userError] = useAuthState(auth)
   const [post, postLoading, postError] = useDocumentData(
-    firebase.firestore().doc(`posts/${router.query.pid}`),
+    firestore.doc(`posts/${router.query.pid}`),
     {
       idField: 'id',
     },
