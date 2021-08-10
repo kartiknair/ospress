@@ -88,7 +88,7 @@ export default function Home() {
             display: flex;
           `}
         >
-          <LinkButton href="/dashboard">Dasboard</LinkButton>
+          <LinkButton href="/dashboard">Dashboard</LinkButton>
           <Button
             css={css`
               margin-left: 1rem;
