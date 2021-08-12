@@ -42,6 +42,11 @@ function List({ uid }) {
       <ul
         css={css`
           list-style: none;
+
+          li {
+            max-width: 25rem;
+            margin: 2.5rem 0;
+          }
         `}
       >
         {list.map(post => (
@@ -55,7 +60,7 @@ function List({ uid }) {
                     margin-bottom: 0.6rem;
                   `}
                 >
-                  {post.title || 'Untitled'}
+                  {post.title ? htmlToText(post.title) : 'Untitled'}
                 </h3>
 
                 <div
@@ -80,14 +85,15 @@ function List({ uid }) {
 
                 <p
                   css={css`
-                    max-width: 25rem;
                     color: var(--grey-4);
                     font-family: 'Newsreader', serif;
                     line-height: 1.5em;
                     margin-top: 0.5rem;
                   `}
                 >
-                  {post.excerpt || truncate(htmlToText(post.content), 25)}
+                  {post.excerpt
+                    ? htmlToText(post.excerpt)
+                    : truncate(htmlToText(post.content), 25)}
                 </p>
               </a>
             </Link>

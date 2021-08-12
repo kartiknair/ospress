@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { useEffect } from 'react'
 import { css } from '@emotion/react'
 import { useRouter } from 'next/router'
+import { htmlToText } from 'html-to-text'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 
@@ -100,10 +101,15 @@ export default function Dashboard() {
                   <li
                     key={post.id}
                     css={css`
-                      margin: 1.5rem 0;
+                      margin: 2rem 0;
                       display: flex;
+
                       a {
-                        margin-left: 3rem;
+                        width: 70%;
+                        margin-left: auto;
+                        display: inline-block;
+                        text-decoration: none;
+                        color: inherit;
                       }
 
                       @media (max-width: 720px) {
@@ -111,8 +117,10 @@ export default function Dashboard() {
                         margin: 2rem 0;
 
                         a {
+                          width: 100%;
                           margin: 0;
                         }
+
                         p {
                           margin-bottom: 0.75rem;
                         }
@@ -121,7 +129,6 @@ export default function Dashboard() {
                   >
                     <p
                       css={css`
-                        width: 7rem;
                         font-size: 0.9rem;
                         color: var(--grey-3);
                       `}
@@ -129,13 +136,7 @@ export default function Dashboard() {
                       <time>{formatDate(post.lastEdited.toDate())}</time>
                     </p>
                     <Link href={`/dashboard/${post.id}`}>
-                      <a
-                        style={{
-                          textDecoration: 'none',
-                          color: 'inherit',
-                          borderBottom: `1px dotted var(--grey-2)`,
-                        }}
-                      >
+                      <a>
                         {!post.published && (
                           <span
                             css={css`
@@ -150,9 +151,8 @@ export default function Dashboard() {
                           >
                             DRAFT
                           </span>
-                        )}
-                        {'  '}
-                        {post.title || 'Untitled'}
+                        )}{' '}
+                        {post.title ? htmlToText(post.title) : 'Untitled'}
                       </a>
                     </Link>
                   </li>

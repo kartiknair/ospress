@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Head from 'next/head'
 import { css } from '@emotion/react'
 import sanitize from 'sanitize-html'
-
+import { htmlToText } from 'html-to-text'
 import { useState, useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
@@ -121,7 +121,7 @@ export default function Post({ post }) {
           margin-bottom: 2rem;
         `}
       >
-        {post.title}
+        {post.title ? htmlToText(post.title) : 'Untitled'}
       </h1>
 
       <div

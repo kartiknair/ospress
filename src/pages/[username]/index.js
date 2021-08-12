@@ -67,10 +67,22 @@ export default function Profile({ user }) {
             key={post.id}
             css={css`
               display: flex;
-              margin: 2rem 0;
+              margin: 2.5rem 0;
+
+              a {
+                text-decoration: none;
+                color: inherit;
+                display: block;
+                width: 70%;
+                margin-left: auto;
+              }
 
               @media (max-width: 626px) {
                 flex-direction: column;
+
+                a {
+                  width: 100%;
+                }
               }
             `}
           >
@@ -90,7 +102,7 @@ export default function Profile({ user }) {
             </p>
 
             <Link href={`/${user.name}/${post.slug}`}>
-              <a style={{ textDecoration: 'none', color: 'inherit' }}>
+              <a>
                 <h3
                   css={css`
                     font-size: 1rem;
@@ -98,7 +110,7 @@ export default function Profile({ user }) {
                     margin-bottom: 0.6rem;
                   `}
                 >
-                  {post.title || 'Untitled'}
+                  {post.title ? htmlToText(post.title) : 'Untitled'}
                 </h3>
 
                 <p
@@ -109,7 +121,9 @@ export default function Profile({ user }) {
                     line-height: 1.5em;
                   `}
                 >
-                  {post.excerpt || truncate(htmlToText(post.content), 25)}
+                  {post.excerpt
+                    ? htmlToText(post.excerpt)
+                    : truncate(htmlToText(post.content), 25)}
                 </p>
               </a>
             </Link>
