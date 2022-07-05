@@ -116,8 +116,9 @@ export default function Post({ post }) {
 
       <h1
         css={css`
-          font-size: 1.5rem;
-          letter-spacing: -0.03em;
+          font-size: 1.75rem;
+          letter-spacing: -0.02em;
+          line-height: 1.35;
           margin-bottom: 2rem;
         `}
       >
