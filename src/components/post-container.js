@@ -23,7 +23,12 @@ const PostContainer = props => (
       }
 
       p {
-        margin: 1rem 0;
+        margin: 1.2rem 0;
+      }
+
+      ul,
+      ol {
+        margin-left: 1.5rem;
       }
 
       blockquote,
@@ -32,11 +37,12 @@ const PostContainer = props => (
       }
 
       h1,
-      h2 {
+      h2,
+      h3 {
         font-family: 'Inter', sans-serif;
         font-weight: 500;
         letter-spacing: -0.02em;
-        margin: 1.5rem 0 0.5rem 0;
+        margin: 2rem 0 0.5rem 0;
       }
 
       h1 {
